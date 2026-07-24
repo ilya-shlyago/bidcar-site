@@ -192,7 +192,7 @@
 const API = "https://bidcarapi.duckdns.org";
 const CITIES = ["Варшава","Краков","Вроцлав","Гданьск","Познань","Катовице"];
 const YARDS = ["Berlin","Hamburg","München","Frankfurt","Köln","Stuttgart","Hannover","Leipzig","Dresden","Nürnberg","Bremen","Düsseldorf","Mannheim","Dortmund"];
-let LANG="ru", lastTotal=0, lastDest="pl";
+let LANG="ru", lastTotal=0, lastDest="pl", lastLogId=null;
 
 const T={
  ru:{h1:"Калькулятор стоимости",sub:"Полная цена авто с аукциона до вашего города.",l_dir:"Направление",dir_uspl:"🇺🇸 США → 🇵🇱 Польша",dir_usby:"🇺🇸 США → 🇧🇾 Беларусь",dir_depl:"🇩🇪 Германия → 🇵🇱 Польша",l_price_usd:"Цена лота, $",l_price_eur:"Цена лота, €",l_year:"Год",l_engine:"Объём, см³",l_fuel:"Топливо",f_petrol:"Бензин",f_diesel:"Дизель",f_electric:"Электро",f_hybrid:"Гибрид",f_plugin:"Plug-in",l_region:"Регион США",rg_east:"Восток",rg_south:"Юг",rg_west:"Запад",l_city:"Город (Польша)",l_route:"Маршрут доставки",rt_turkey:"Турция",l_benefit:"Льгота на пошлину (−50%)",l_yard:"Ярд (Германия)",l_vat:"Цена с НДС (MwSt)",l_deliv:"Доставка",dv_trailer:"Автовозом",dv_self:"Своим ходом",btn_calc:"Рассчитать",biz_title:"Бизнес — прибыль от перепродажи",biz_sub:"Рыночная цена по живым объявлениям + ваша прибыль.",l_make:"Марка",l_model:"Модель",l_body:"Кузов",l_repair:"Стоимость ремонта, €",btn_biz:"Оценить прибыль",foot:"© 2026 BidCar",r_total:"ИТОГО до города",r_price:"Цена авто",r_fees:"Сборы аукциона",r_delivery:"Доставка",r_customs:"Растаможка",r_reg:"Оформление",r_oc:"OC-страховка (год, ориентир)",calc:"Считаю…",err:"Не удалось посчитать. Попробуй позже.",binvest:"Вложено всего",bsale:"Рыночная цена",bprofit:"Прибыль",byear:"за {y} г.",bmodel:"по модели {a}–{b}",bfew:"Мало объявлений — оценка ориентировочная",bcnt:"{n} объяв."},
@@ -254,7 +254,7 @@ document.getElementById('calc').onclick=async()=>{
 function val(id){return document.getElementById(id).value;}
 
 function renderResult(d,j){
-  lastTotal=j.total; lastDest=j.destination;
+  lastTotal=j.total; lastDest=j.destination; lastLogId=(j.log_id||null);
   let rows='';
   if(d==='us-by'){
     rows+=rowHTML(t('r_price'),j.price_eur)+rowHTML(t('r_fees'),j.fees_eur)
@@ -305,8 +305,8 @@ document.getElementById('calcbiz').onclick=async()=>{
   berr.classList.add('hidden'); out.innerHTML=`<div class="spin">${t('calc')}</div>`;
   const year=+val('year'),repair=+val('repair')||0;
   let url,body;
-  if(lastDest==='by'){url='/resale/by';body={make_id:+val('make'),model_id:+val('model'),year,total:lastTotal,repair};}
-  else{url='/resale/pl';body={make_slug:val('make'),model_slug:val('model'),year,body_slug:val('body'),mileage:0,total:lastTotal,repair};}
+  if(lastDest==='by'){url='/resale/by';body={make_id:+val('make'),model_id:+val('model'),year,total:lastTotal,repair,log_id:lastLogId};}
+  else{url='/resale/pl';body={make_slug:val('make'),model_slug:val('model'),year,body_slug:val('body'),mileage:0,total:lastTotal,repair,log_id:lastLogId};}
   try{
     const r=await authFetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
     if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(typeof e.detail==='string'?e.detail:'');}
