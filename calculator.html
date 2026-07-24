@@ -50,12 +50,28 @@
   .err{color:#ff9a9a;font-size:14px;margin-top:12px}
   .spin{color:var(--mut);font-size:14px;margin-top:12px}
   footer{color:var(--mut);font-size:12px;text-align:center;padding:26px 0;border-top:1px solid var(--line);margin-top:20px}
+  .nav-right{display:flex;align-items:center;gap:12px;position:relative}
+  .iconbtn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative}
+  .iconbtn:hover{border-color:var(--gold)}
+  .iconbtn svg{width:18px;height:18px}
+  .dot{position:absolute;top:-1px;right:-1px;width:9px;height:9px;border-radius:50%;background:#48d18a;border:2px solid var(--navy)}
+  .menu{position:absolute;top:46px;right:0;min-width:220px;background:#0e2246;border:1px solid var(--line);border-radius:12px;padding:8px;box-shadow:0 14px 34px rgba(0,0,0,.55);z-index:30}
+  .menu .mi{display:flex;justify-content:space-between;gap:10px;padding:9px 10px;font-size:14px;border-radius:8px;color:var(--ink)}
+  .menu .mi.muted{color:var(--mut);font-size:13px}
+  .menu a.mi{cursor:pointer}
+  .menu a.mi:hover{background:rgba(255,255,255,.05)}
+  .menu .sep{height:1px;background:var(--line);margin:6px 2px}
+  .menu .login{justify-content:center;background:rgba(233,185,73,.12);color:var(--gold);font-weight:700}
 </style>
 </head>
 <body>
 <header><div class="wrap nav">
   <a class="logo" href="index.html"><svg viewBox="0 0 512 512"><rect width="512" height="512" rx="116" fill="#0f2a52"/><path d="M84 292 L96 268 C100 259 108 253 118 252 L206 242 L268 205 C280 198 293 194 307 194 L336 194 C356 194 375 202 389 216 L420 247 C433 250 442 258 444 270 L446 286 C447 292 443 296 437 296 L96 296 C88 296 84 294 84 290 Z" fill="#fff"/><circle cx="176" cy="300" r="30" fill="#0a1a36"/><circle cx="176" cy="300" r="30" fill="none" stroke="#e9b949" stroke-width="6"/><circle cx="356" cy="300" r="30" fill="#0a1a36"/><circle cx="356" cy="300" r="30" fill="none" stroke="#e9b949" stroke-width="6"/><rect x="120" y="344" width="272" height="10" rx="5" fill="#e9b949"/></svg> Bid<span class="gold">Car</span></a>
-  <div class="langs" id="langs"><button data-l="ru" class="on">RU</button><button data-l="pl">PL</button><button data-l="en">EN</button><button data-l="uk">UK</button></div>
+  <div class="nav-right">
+    <div class="langs" id="langs"><button data-l="ru" class="on">RU</button><button data-l="pl">PL</button><button data-l="en">EN</button><button data-l="uk">UK</button></div>
+    <button class="iconbtn" id="profile" aria-label="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"/></svg><span class="dot hidden" id="pdot"></span></button>
+    <div class="menu hidden" id="menu"></div>
+  </div>
 </div></header>
 
 <div class="wrap">
@@ -68,12 +84,6 @@
     <div class="sub" style="margin:8px 0 18px" data-i="gate_sub">Войдите, чтобы пользоваться калькулятором.</div>
     <div id="tg-btn" style="display:inline-block"></div>
     <div class="err hidden" id="gerr"></div>
-  </div>
-
-  <!-- USER BAR -->
-  <div id="userbar" class="hidden" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-size:14px;color:var(--mut)">
-    <span id="uname"></span>
-    <span style="display:flex;gap:12px;align-items:center"><span id="uquota"></span><a href="#" id="logout" data-i="logout">Выйти</a></span>
   </div>
 
   <div id="app" class="hidden">
@@ -165,10 +175,10 @@ const T={
  en:{h1:"Cost calculator",sub:"Full landed cost of an auction car to your city.",l_dir:"Direction",dir_uspl:"🇺🇸 USA → 🇵🇱 Poland",dir_usby:"🇺🇸 USA → 🇧🇾 Belarus",dir_depl:"🇩🇪 Germany → 🇵🇱 Poland",l_price_usd:"Lot price, $",l_price_eur:"Lot price, €",l_year:"Year",l_engine:"Engine, cc",l_fuel:"Fuel",f_petrol:"Petrol",f_diesel:"Diesel",f_electric:"Electric",f_hybrid:"Hybrid",f_plugin:"Plug-in",l_region:"US region",rg_east:"East",rg_south:"South",rg_west:"West",l_city:"City (Poland)",l_route:"Delivery route",rt_turkey:"Turkey",l_benefit:"Duty benefit (−50%)",l_yard:"Yard (Germany)",l_vat:"Price incl. VAT (MwSt)",l_deliv:"Delivery",dv_trailer:"By trailer",dv_self:"Self-drive",btn_calc:"Calculate",biz_title:"Business — resale profit",biz_sub:"Market price from live listings + your profit.",l_make:"Make",l_model:"Model",l_body:"Body",l_repair:"Repair cost, €",btn_biz:"Estimate profit",foot:"© 2026 BidCar",r_total:"TOTAL to city",r_price:"Car price",r_fees:"Auction fees",r_delivery:"Delivery",r_customs:"Customs",r_reg:"Paperwork",r_oc:"OC insurance (year, approx)",calc:"Calculating…",err:"Couldn't calculate. Try later.",binvest:"Total invested",bsale:"Market price",bprofit:"Profit",byear:"for {y}",bmodel:"model {a}–{b}",bfew:"Few listings — approximate",bcnt:"{n} listings"},
  uk:{h1:"Калькулятор вартості",sub:"Повна ціна авто з аукціону до вашого міста.",l_dir:"Напрямок",dir_uspl:"🇺🇸 США → 🇵🇱 Польща",dir_usby:"🇺🇸 США → 🇧🇾 Білорусь",dir_depl:"🇩🇪 Німеччина → 🇵🇱 Польща",l_price_usd:"Ціна лоту, $",l_price_eur:"Ціна лоту, €",l_year:"Рік",l_engine:"Обʼєм, см³",l_fuel:"Пальне",f_petrol:"Бензин",f_diesel:"Дизель",f_electric:"Електро",f_hybrid:"Гібрид",f_plugin:"Plug-in",l_region:"Регіон США",rg_east:"Схід",rg_south:"Південь",rg_west:"Захід",l_city:"Місто (Польща)",l_route:"Маршрут доставки",rt_turkey:"Туреччина",l_benefit:"Пільга на мито (−50%)",l_yard:"Ярд (Німеччина)",l_vat:"Ціна з ПДВ (MwSt)",l_deliv:"Доставка",dv_trailer:"Автовозом",dv_self:"Своїм ходом",btn_calc:"Розрахувати",biz_title:"Бізнес — прибуток від перепродажу",biz_sub:"Ринкова ціна з оголошень + ваш прибуток.",l_make:"Марка",l_model:"Модель",l_body:"Кузов",l_repair:"Вартість ремонту, €",btn_biz:"Оцінити прибуток",foot:"© 2026 BidCar",r_total:"РАЗОМ до міста",r_price:"Ціна авто",r_fees:"Збори аукціону",r_delivery:"Доставка",r_customs:"Розмитнення",r_reg:"Оформлення",r_oc:"OC-страховка (рік, орієнтир)",calc:"Рахую…",err:"Не вдалося порахувати. Спробуй пізніше.",binvest:"Вкладено всього",bsale:"Ринкова ціна",bprofit:"Прибуток",byear:"за {y} р.",bmodel:"по моделі {a}–{b}",bfew:"Мало оголошень — оцінка орієнтовна",bcnt:"{n} оголошень"}
 };
-Object.assign(T.ru,{gate_title:"Вход через Telegram",gate_sub:"Войдите, чтобы пользоваться калькулятором.",logout:"Выйти",q_left:"Осталось {n} из {m}",q_prem:"⭐ Premium — безлимит",paywall:"Лимит {m} бесплатных расчётов исчерпан. Оформи Premium в боте.",openbot:"Открыть бота",relogin:"Сессия истекла — войди заново.",autherr:"Не удалось войти. Попробуй ещё раз."});
-Object.assign(T.pl,{gate_title:"Logowanie przez Telegram",gate_sub:"Zaloguj się, aby korzystać z kalkulatora.",logout:"Wyloguj",q_left:"Pozostało {n} z {m}",q_prem:"⭐ Premium — bez limitu",paywall:"Limit {m} darmowych obliczeń wyczerpany. Wykup Premium w bocie.",openbot:"Otwórz bota",relogin:"Sesja wygasła — zaloguj się ponownie.",autherr:"Logowanie nie powiodło się. Spróbuj ponownie."});
-Object.assign(T.en,{gate_title:"Sign in with Telegram",gate_sub:"Sign in to use the calculator.",logout:"Log out",q_left:"{n} of {m} left",q_prem:"⭐ Premium — unlimited",paywall:"Your {m} free calculations are used up. Get Premium in the bot.",openbot:"Open the bot",relogin:"Session expired — sign in again.",autherr:"Sign-in failed. Try again."});
-Object.assign(T.uk,{gate_title:"Вхід через Telegram",gate_sub:"Увійдіть, щоб користуватися калькулятором.",logout:"Вийти",q_left:"Залишилось {n} з {m}",q_prem:"⭐ Premium — безліміт",paywall:"Ліміт {m} безкоштовних розрахунків вичерпано. Оформи Premium у боті.",openbot:"Відкрити бота",relogin:"Сесія завершилась — увійди знову.",autherr:"Не вдалося увійти. Спробуй ще раз."});
+Object.assign(T.ru,{gate_title:"Вход через Telegram",gate_sub:"Войдите, чтобы пользоваться калькулятором.",logout:"Выйти",m_login:"Войти",m_status:"Статус",m_free:"Free",m_left:"Осталось",q_left:"Осталось {n} из {m}",q_prem:"⭐ Premium — безлимит",paywall:"Лимит {m} бесплатных расчётов исчерпан. Оформи Premium в боте.",openbot:"Открыть бота",relogin:"Сессия истекла — войди заново.",autherr:"Не удалось войти. Попробуй ещё раз."});
+Object.assign(T.pl,{gate_title:"Logowanie przez Telegram",gate_sub:"Zaloguj się, aby korzystać z kalkulatora.",logout:"Wyloguj",m_login:"Zaloguj",m_status:"Status",m_free:"Free",m_left:"Pozostało",q_left:"Pozostało {n} z {m}",q_prem:"⭐ Premium — bez limitu",paywall:"Limit {m} darmowych obliczeń wyczerpany. Wykup Premium w bocie.",openbot:"Otwórz bota",relogin:"Sesja wygasła — zaloguj się ponownie.",autherr:"Logowanie nie powiodło się. Spróbuj ponownie."});
+Object.assign(T.en,{gate_title:"Sign in with Telegram",gate_sub:"Sign in to use the calculator.",logout:"Log out",m_login:"Sign in",m_status:"Status",m_free:"Free",m_left:"Left",q_left:"{n} of {m} left",q_prem:"⭐ Premium — unlimited",paywall:"Your {m} free calculations are used up. Get Premium in the bot.",openbot:"Open the bot",relogin:"Session expired — sign in again.",autherr:"Sign-in failed. Try again."});
+Object.assign(T.uk,{gate_title:"Вхід через Telegram",gate_sub:"Увійдіть, щоб користуватися калькулятором.",logout:"Вийти",m_login:"Увійти",m_status:"Статус",m_free:"Free",m_left:"Залишилось",q_left:"Залишилось {n} з {m}",q_prem:"⭐ Premium — безліміт",paywall:"Ліміт {m} безкоштовних розрахунків вичерпано. Оформи Premium у боті.",openbot:"Відкрити бота",relogin:"Сесія завершилась — увійди знову.",autherr:"Не вдалося увійти. Спробуй ще раз."});
 function t(k){return (T[LANG][k]!=null?T[LANG][k]:T.ru[k])||k}
 function applyLang(){
   document.documentElement.lang=LANG;
@@ -313,27 +323,50 @@ window.onTelegramAuth=async(user)=>{
     if(!r.ok) throw new Error();
     const j=await r.json();
     TOKEN=j.token; localStorage.setItem('bidcar_token',TOKEN);
+    if(j.name) localStorage.setItem('bidcar_name',j.name);
     showApp(j);
   }catch(e){gerr.textContent=t('autherr'); gerr.classList.remove('hidden');}
 };
+let ME=null;
 function quotaText(m){return m.premium?t('q_prem'):t('q_left').replace('{n}',Math.max(0,m.limit-m.used)).replace('{m}',m.limit);}
+function renderMenu(){
+  const menu=document.getElementById('menu');
+  if(TOKEN&&ME){
+    menu.innerHTML=
+      `<div class="mi"><b>👤 ${ME.name||''}</b></div>`
+      +`<div class="mi muted"><span>${t('m_status')}</span><span>${ME.premium?t('q_prem'):t('m_free')}</span></div>`
+      +(ME.premium?'':`<div class="mi muted"><span>${t('m_left')}</span><span>${Math.max(0,ME.limit-ME.used)} / ${ME.limit}</span></div>`)
+      +`<div class="sep"></div>`
+      +`<a class="mi" id="mlogout">${t('logout')}</a>`;
+    document.getElementById('mlogout').onclick=(e)=>{e.preventDefault();doLogout();};
+  }else{
+    menu.innerHTML=`<a class="mi login" id="mlogin">${t('m_login')}</a>`;
+    document.getElementById('mlogin').onclick=(e)=>{e.preventDefault();closeMenu();showGate();window.scrollTo({top:0,behavior:'smooth'});};
+  }
+}
+function closeMenu(){document.getElementById('menu').classList.add('hidden');}
 function showApp(m){
+  ME=m;
   document.getElementById('gate').classList.add('hidden');
   document.getElementById('app').classList.remove('hidden');
-  const bar=document.getElementById('userbar'); bar.classList.remove('hidden');
-  if(m.name) document.getElementById('uname').textContent='👤 '+m.name;
-  document.getElementById('uquota').textContent=quotaText(m);
+  document.getElementById('pdot').classList.remove('hidden');
+  renderMenu();
 }
 function showGate(){
+  ME=null;
   document.getElementById('app').classList.add('hidden');
-  document.getElementById('userbar').classList.add('hidden');
   document.getElementById('gate').classList.remove('hidden');
-  renderWidget();
+  document.getElementById('pdot').classList.add('hidden');
+  renderMenu(); renderWidget();
 }
+function doLogout(){TOKEN=null;localStorage.removeItem('bidcar_token');localStorage.removeItem('bidcar_name');document.getElementById('gerr').classList.add('hidden');closeMenu();showGate();}
 async function refreshQuota(){
   try{const r=await fetch(API+'/me',{headers:{Authorization:'Bearer '+TOKEN}});
-    if(r.ok){const m=await r.json();document.getElementById('uquota').textContent=quotaText(m);}}catch(e){}
+    if(r.ok){ME=Object.assign(ME||{},await r.json());renderMenu();}}catch(e){}
 }
+// профиль: открыть/закрыть меню
+document.getElementById('profile').onclick=(e)=>{e.stopPropagation();const m=document.getElementById('menu');const was=m.classList.contains('hidden');renderMenu();m.classList.toggle('hidden',!was);};
+document.addEventListener('click',(e)=>{const m=document.getElementById('menu');if(!m.classList.contains('hidden')&&!e.target.closest('#menu')&&!e.target.closest('#profile'))closeMenu();});
 async function authFetch(url,opts){
   opts=opts||{}; opts.headers=Object.assign({},opts.headers,{Authorization:'Bearer '+TOKEN});
   const r=await fetch(API+url,opts);
@@ -346,11 +379,10 @@ async function initAuth(){
   if(!TOKEN){showGate();return;}
   try{const r=await fetch(API+'/me',{headers:{Authorization:'Bearer '+TOKEN}});
     if(!r.ok) throw new Error();
-    showApp(await r.json());
+    const j=await r.json(); j.name=localStorage.getItem('bidcar_name'); showApp(j);
   }catch(e){TOKEN=null;localStorage.removeItem('bidcar_token');showGate();}
 }
 
-document.getElementById('logout').onclick=(e)=>{e.preventDefault();TOKEN=null;localStorage.removeItem('bidcar_token');document.getElementById('gerr').classList.add('hidden');showGate();};
 switchDir(); applyLang(); initAuth();
 </script>
 </body>
