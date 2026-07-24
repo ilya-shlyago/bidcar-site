@@ -244,7 +244,10 @@
     <div class="cta">
       <h2 data-i="cta_h">Готовы посчитать свой лот?</h2>
       <p data-i="cta_p">Откройте BidCar в Telegram — первые 5 расчётов бесплатно, без регистрации.</p>
-      <a class="btn" href="https://t.me/bid_calculation_bot" target="_blank" style="font-size:17px;padding:16px 30px">✈️ <span data-i="cta_btn">Открыть BidCar</span></a>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+        <a class="btn" href="https://t.me/bid_calculation_bot" target="_blank">✈️ <span data-i="cta_btn">Открыть в Telegram</span></a>
+        <a class="btn btn-ghost" href="calculator.html" data-i="cta_btn2">Открыть калькулятор</a>
+      </div>
     </div>
   </div>
 </section>
@@ -265,7 +268,7 @@ const I = {
   r_eye:"Откуда и куда",r_sub:"Аукционы Copart в США и Германии → доставка в Польшу или Беларусь. Для Беларуси — актуальные маршруты в обход санкционных ограничений.",rt1_n:"Клайпеда",rt1:"Литва · 1–1.5 мес",rt2_n:"Поти",rt2:"Грузия · ~3 мес",rt3_n:"Турция",rt3:"1.5–2 мес",rt4_n:"Гдыня",rt4:"порт ЕС → город",
   rs_eye:"Бизнес-режим",rs_h2:"Купить, чтобы заработать",rs_sub:"BidCar сам находит рыночную цену по живым объявлениям — за конкретный год и в среднем по модели — и показывает вашу прибыль с учётом ремонта. Никакого «на глаз».",rs_cta:"Попробовать в боте",
   d_title:"Оценка перепродажи",d_r1:"Затраты (ИТОГО)",d_r2:"Ремонт",d_r3:"Вложено всего",d_m1:"за 2020 г.",d_m2:"по модели 2016–2024",d_profit:"Прибыль",
-  cta_h:"Готовы посчитать свой лот?",cta_p:"Откройте BidCar в Telegram — первые 5 расчётов бесплатно, без регистрации.",cta_btn:"Открыть BidCar",foot_note:"© 2026 BidCar · расчёт авто с аукционов"},
+  cta_h:"Готовы посчитать свой лот?",cta_p:"Откройте BidCar в Telegram — первые 5 расчётов бесплатно, без регистрации.",cta_btn:"Открыть в Telegram",cta_btn2:"Открыть калькулятор",foot_note:"© 2026 BidCar · расчёт авто с аукционов"},
 
   pl:{nav_cta:"Otwórz bota",hero_tag:"aukcje USA i Niemiec",hero_h1:'Pełny koszt auta z aukcji — <span class="gold">w minutę</span>',hero_lead:"Cena, opłaty, transport, cło i rejestracja — liczymy wszystko do Twojego miasta w Polsce lub na Białorusi. Bez niespodzianek na cle.",hero_cta:"Otwórz w Telegramie",hero_cta2:"Otwórz kalkulator",hero_note:"Pierwsze 5 wyliczeń — za darmo · 🇷🇺 🇵🇱 🇬🇧 🇺🇦",
   what_eye:"Co liczymy",what_h2:"Wszystko, co wpływa na cenę końcową",what_sub:"Nie tylko cena na aukcji — realna kwota, którą zapłacisz do rejestracji.",
@@ -274,7 +277,7 @@ const I = {
   r_eye:"Skąd i dokąd",r_sub:"Aukcje Copart w USA i Niemczech → dostawa do Polski lub na Białoruś. Dla Białorusi — aktualne trasy omijające ograniczenia sankcyjne.",rt1_n:"Kłajpeda",rt1:"Litwa · 1–1.5 mies",rt2_n:"Poti",rt2:"Gruzja · ~3 mies",rt3_n:"Turcja",rt3:"1.5–2 mies",rt4_n:"Gdynia",rt4:"port UE → miasto",
   rs_eye:"Tryb biznes",rs_h2:"Kup, żeby zarobić",rs_sub:"BidCar sam znajduje cenę rynkową z żywych ofert — za dany rok i średnio wg modelu — i pokazuje Twój zysk z uwzględnieniem naprawy. Żadnego „na oko”.",rs_cta:"Wypróbuj w bocie",
   d_title:"Wycena odsprzedaży",d_r1:"Koszty (RAZEM)",d_r2:"Naprawa",d_r3:"Zainwestowane",d_m1:"za 2020 r.",d_m2:"model 2016–2024",d_profit:"Zysk",
-  cta_h:"Gotów policzyć swój lot?",cta_p:"Otwórz BidCar w Telegramie — pierwsze 5 wyliczeń za darmo, bez rejestracji.",cta_btn:"Otwórz BidCar",foot_note:"© 2026 BidCar · wycena aut z aukcji"},
+  cta_h:"Gotów policzyć swój lot?",cta_p:"Otwórz BidCar w Telegramie — pierwsze 5 wyliczeń za darmo, bez rejestracji.",cta_btn:"Otwórz w Telegramie",cta_btn2:"Otwórz kalkulator",foot_note:"© 2026 BidCar · wycena aut z aukcji"},
 
   en:{nav_cta:"Open the bot",hero_tag:"US & Germany auctions",hero_h1:'Full landed cost of an auction car — <span class="gold">in a minute</span>',hero_lead:"Bid, fees, shipping, customs and paperwork — we calculate everything to your city in Poland or Belarus. No customs surprises.",hero_cta:"Open in Telegram",hero_cta2:"Open calculator",hero_note:"First 5 calculations free · 🇷🇺 🇵🇱 🇬🇧 🇺🇦",
   what_eye:"What we calculate",what_h2:"Everything that affects the final price",what_sub:"Not just the auction bid — the real amount you pay before registration.",
@@ -283,7 +286,7 @@ const I = {
   r_eye:"From and to",r_sub:"Copart auctions in the US and Germany → delivery to Poland or Belarus. For Belarus — current routes around sanction limits.",rt1_n:"Klaipeda",rt1:"Lithuania · 1–1.5 mo",rt2_n:"Poti",rt2:"Georgia · ~3 mo",rt3_n:"Turkey",rt3:"1.5–2 mo",rt4_n:"Gdynia",rt4:"EU port → city",
   rs_eye:"Business mode",rs_h2:"Buy to earn",rs_sub:"BidCar finds the market price from live listings — for the exact year and model average — and shows your profit including repairs. No guesswork.",rs_cta:"Try it in the bot",
   d_title:"Resale estimate",d_r1:"Costs (TOTAL)",d_r2:"Repair",d_r3:"Total invested",d_m1:"for 2020",d_m2:"model 2016–2024",d_profit:"Profit",
-  cta_h:"Ready to price your lot?",cta_p:"Open BidCar in Telegram — first 5 calculations free, no signup.",cta_btn:"Open BidCar",foot_note:"© 2026 BidCar · auction car cost calculator"},
+  cta_h:"Ready to price your lot?",cta_p:"Open BidCar in Telegram — first 5 calculations free, no signup.",cta_btn:"Open in Telegram",cta_btn2:"Open calculator",foot_note:"© 2026 BidCar · auction car cost calculator"},
 
   uk:{nav_cta:"Відкрити бота",hero_tag:"аукціони США та Німеччини",hero_h1:'Повна вартість авто з аукціону — <span class="gold">за хвилину</span>',hero_lead:"Ставка, збори, доставка, розмитнення й оформлення — рахуємо все до вашого міста в Польщі чи Білорусі. Без сюрпризів на митниці.",hero_cta:"Відкрити в Telegram",hero_cta2:"Відкрити калькулятор",hero_note:"Перші 5 розрахунків — безкоштовно · 🇷🇺 🇵🇱 🇬🇧 🇺🇦",
   what_eye:"Що рахуємо",what_h2:"Усе, що впливає на кінцеву ціну",what_sub:"Не лише ставка на аукціоні — реальна сума, яку ви заплатите до постановки на облік.",
@@ -292,7 +295,7 @@ const I = {
   r_eye:"Звідки й куди",r_sub:"Аукціони Copart у США та Німеччині → доставка в Польщу чи Білорусь. Для Білорусі — актуальні маршрути в обхід санкційних обмежень.",rt1_n:"Клайпеда",rt1:"Литва · 1–1.5 міс",rt2_n:"Поті",rt2:"Грузія · ~3 міс",rt3_n:"Туреччина",rt3:"1.5–2 міс",rt4_n:"Гдиня",rt4:"порт ЄС → місто",
   rs_eye:"Бізнес-режим",rs_h2:"Купити, щоб заробити",rs_sub:"BidCar сам знаходить ринкову ціну за живими оголошеннями — за конкретний рік і в середньому по моделі — і показує ваш прибуток з урахуванням ремонту. Жодного «на око».",rs_cta:"Спробувати в боті",
   d_title:"Оцінка перепродажу",d_r1:"Витрати (РАЗОМ)",d_r2:"Ремонт",d_r3:"Вкладено всього",d_m1:"за 2020 р.",d_m2:"по моделі 2016–2024",d_profit:"Прибуток",
-  cta_h:"Готові порахувати свій лот?",cta_p:"Відкрийте BidCar у Telegram — перші 5 розрахунків безкоштовно, без реєстрації.",cta_btn:"Відкрити BidCar",foot_note:"© 2026 BidCar · розрахунок авто з аукціонів"}
+  cta_h:"Готові порахувати свій лот?",cta_p:"Відкрийте BidCar у Telegram — перші 5 розрахунків безкоштовно, без реєстрації.",cta_btn:"Відкрити в Telegram",cta_btn2:"Відкрити калькулятор",foot_note:"© 2026 BidCar · розрахунок авто з аукціонів"}
 };
 let CURLANG='ru';
 function setLang(l){
