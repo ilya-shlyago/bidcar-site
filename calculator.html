@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BidCar — калькулятор</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20512%20512'%3E%3Crect%20width='512'%20height='512'%20rx='96'%20fill='%230f2a52'/%3E%3Cpath%20d='M84%20292%20L96%20268%20C100%20259%20108%20253%20118%20252%20L206%20242%20L268%20205%20C280%20198%20293%20194%20307%20194%20L336%20194%20C356%20194%20375%20202%20389%20216%20L420%20247%20C433%20250%20442%20258%20444%20270%20L446%20286%20C447%20292%20443%20296%20437%20296%20L96%20296%20C88%20296%2084%20294%2084%20290%20Z'%20fill='%23ffffff'/%3E%3Crect%20x='120'%20y='344'%20width='272'%20height='10'%20rx='5'%20fill='%23e9b949'/%3E%3C/svg%3E">
+<style>
+  :root{--navy:#0a1a36;--navy2:#13294b;--panel:#0f2247;--panel2:#152c53;
+    --gold:#e9b949;--gold2:#f7d67a;--ink:#eaf1fb;--mut:#9db2d4;--line:rgba(255,255,255,.11);}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    background:var(--navy);color:var(--ink);line-height:1.5}
+  a{color:var(--gold);text-decoration:none}
+  .wrap{max-width:720px;margin:0 auto;padding:0 18px}
+  header{border-bottom:1px solid var(--line);background:rgba(10,26,54,.9);position:sticky;top:0;z-index:10}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px}
+  .logo svg{width:34px;height:34px}
+  .gold{color:var(--gold)}
+  .langs{display:flex;gap:2px;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:9px;padding:3px}
+  .langs button{background:none;border:none;color:var(--mut);font-size:13px;font-weight:600;padding:5px 8px;border-radius:6px;cursor:pointer}
+  .langs button.on{background:var(--gold);color:#25190a}
+  h1{font-size:26px;font-weight:800;margin:26px 0 4px}
+  .sub{color:var(--mut);margin-bottom:22px;font-size:15px}
+  .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);
+    border-radius:16px;padding:22px;margin-bottom:18px}
+  label{display:block;font-size:13px;color:var(--mut);margin:14px 0 6px;font-weight:600}
+  input,select{width:100%;background:#0a1c3d;border:1px solid var(--line);color:var(--ink);
+    padding:12px 13px;border-radius:10px;font-size:15px;outline:none}
+  input:focus,select:focus{border-color:var(--gold)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .chk{display:flex;align-items:center;gap:9px;margin-top:14px;font-size:14px;color:var(--ink)}
+  .chk input{width:auto}
+  .btn{width:100%;margin-top:20px;background:linear-gradient(180deg,var(--gold2),var(--gold));
+    color:#25190a;font-weight:800;padding:15px;border:none;border-radius:12px;font-size:16px;cursor:pointer}
+  .btn:disabled{opacity:.5;cursor:default}
+  .btn-sec{background:transparent;color:var(--ink);border:1px solid var(--gold)}
+  .hidden{display:none}
+  .row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,.09);font-size:15px}
+  .row span:last-child{font-weight:700}
+  .row.total{border:none;font-size:19px;padding-top:14px}
+  .row.total span:last-child{color:var(--gold)}
+  .rtitle{font-weight:800;font-size:17px;margin-bottom:4px}
+  .rcar{color:var(--mut);font-size:14px;margin-bottom:14px}
+  .mkt{margin:12px 0;padding:12px 14px;background:rgba(233,185,73,.07);border:1px solid rgba(233,185,73,.22);border-radius:10px}
+  .mkt .l{display:flex;justify-content:space-between;font-size:14px;padding:4px 0;color:var(--mut)}
+  .mkt .l b{color:var(--ink)}
+  .profit{font-size:19px;font-weight:800;text-align:center;padding:12px;border-radius:10px;margin-top:12px}
+  .err{color:#ff9a9a;font-size:14px;margin-top:12px}
+  .spin{color:var(--mut);font-size:14px;margin-top:12px}
+  footer{color:var(--mut);font-size:12px;text-align:center;padding:26px 0;border-top:1px solid var(--line);margin-top:20px}
+</style>
+</head>
+<body>
+<header><div class="wrap nav">
+  <a class="logo" href="index.html"><svg viewBox="0 0 512 512"><rect width="512" height="512" rx="116" fill="#0f2a52"/><path d="M84 292 L96 268 C100 259 108 253 118 252 L206 242 L268 205 C280 198 293 194 307 194 L336 194 C356 194 375 202 389 216 L420 247 C433 250 442 258 444 270 L446 286 C447 292 443 296 437 296 L96 296 C88 296 84 294 84 290 Z" fill="#fff"/><circle cx="176" cy="300" r="30" fill="#0a1a36"/><circle cx="176" cy="300" r="30" fill="none" stroke="#e9b949" stroke-width="6"/><circle cx="356" cy="300" r="30" fill="#0a1a36"/><circle cx="356" cy="300" r="30" fill="none" stroke="#e9b949" stroke-width="6"/><rect x="120" y="344" width="272" height="10" rx="5" fill="#e9b949"/></svg> Bid<span class="gold">Car</span></a>
+  <div class="langs" id="langs"><button data-l="ru" class="on">RU</button><button data-l="pl">PL</button><button data-l="en">EN</button><button data-l="uk">UK</button></div>
+</div></header>
+
+<div class="wrap">
+  <h1 data-i="h1">Калькулятор стоимости</h1>
+  <div class="sub" data-i="sub">Полная цена авто с аукциона до вашего города. Тот же расчёт, что в боте.</div>
+
+  <div class="card">
+    <label data-i="l_dir">Направление</label>
+    <select id="dir">
+      <option value="us-pl" data-i="dir_uspl">🇺🇸 США → 🇵🇱 Польша</option>
+      <option value="us-by" data-i="dir_usby">🇺🇸 США → 🇧🇾 Беларусь</option>
+      <option value="de-pl" data-i="dir_depl">🇩🇪 Германия → 🇵🇱 Польша</option>
+    </select>
+
+    <div class="grid2">
+      <div><label id="lbl_price" data-i="l_price_usd">Цена лота, $</label><input id="price" type="number" value="10000"></div>
+      <div><label data-i="l_year">Год</label><input id="year" type="number" value="2020"></div>
+    </div>
+    <div class="grid2">
+      <div><label data-i="l_engine">Объём, см³</label><input id="engine" type="number" value="1998"></div>
+      <div><label data-i="l_fuel">Топливо</label>
+        <select id="fuel">
+          <option value="petrol" data-i="f_petrol">Бензин</option>
+          <option value="diesel" data-i="f_diesel">Дизель</option>
+          <option value="electric" data-i="f_electric">Электро</option>
+          <option value="hybrid" data-i="f_hybrid">Гибрид</option>
+          <option value="plugin" data-i="f_plugin">Plug-in</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- US→PL -->
+    <div id="f_uspl">
+      <div class="grid2">
+        <div><label data-i="l_region">Регион США</label>
+          <select id="region"><option value="east" data-i="rg_east">Восток</option><option value="south" data-i="rg_south">Юг</option><option value="west" data-i="rg_west">Запад</option></select></div>
+        <div><label data-i="l_city">Город (Польша)</label><select id="city_pl" class="city_pl"></select></div>
+      </div>
+    </div>
+    <!-- US→BY -->
+    <div id="f_usby" class="hidden">
+      <label data-i="l_route">Маршрут доставки</label>
+      <select id="route"><option value="klaipeda">Клайпеда</option><option value="poti">Поти</option><option value="turkey" data-i="rt_turkey">Турция</option></select>
+      <div class="chk"><input type="checkbox" id="benefit"><label style="margin:0" data-i="l_benefit">Льгота на пошлину (−50%)</label></div>
+    </div>
+    <!-- DE→PL -->
+    <div id="f_depl" class="hidden">
+      <div class="grid2">
+        <div><label data-i="l_yard">Ярд (Германия)</label><select id="yard"></select></div>
+        <div><label data-i="l_city">Город (Польша)</label><select id="city_pl2" class="city_pl"></select></div>
+      </div>
+      <div class="chk"><input type="checkbox" id="vat"><label style="margin:0" data-i="l_vat">Цена с НДС (MwSt)</label></div>
+      <label data-i="l_deliv">Доставка</label>
+      <select id="deliv"><option value="trailer" data-i="dv_trailer">Автовозом</option><option value="self" data-i="dv_self">Своим ходом</option></select>
+    </div>
+
+    <button class="btn" id="calc" data-i="btn_calc">Рассчитать</button>
+    <div class="err hidden" id="err"></div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="card hidden" id="result"></div>
+
+  <!-- BUSINESS -->
+  <div class="card hidden" id="biz">
+    <div class="rtitle">📈 <span data-i="biz_title">Бизнес — прибыль от перепродажи</span></div>
+    <div class="sub" style="margin:6px 0 0" data-i="biz_sub">Рыночная цена по живым объявлениям + ваша прибыль.</div>
+    <div class="grid2">
+      <div><label data-i="l_make">Марка</label><select id="make"></select></div>
+      <div><label data-i="l_model">Модель</label><select id="model"></select></div>
+    </div>
+    <div id="body_wrap"><label data-i="l_body">Кузов</label><select id="body"></select></div>
+    <label data-i="l_repair">Стоимость ремонта, €</label><input id="repair" type="number" value="0">
+    <button class="btn btn-sec" id="calcbiz" data-i="btn_biz">Оценить прибыль</button>
+    <div class="err hidden" id="berr"></div>
+    <div id="bizresult"></div>
+  </div>
+</div>
+
+<footer><span data-i="foot">© 2026 BidCar · расчёт из того же кода, что и бот</span> · <a href="https://t.me/bid_calculation_bot" target="_blank">Telegram</a></footer>
+
+<script>
+const API = "https://bidcarapi.duckdns.org";
+const CITIES = ["Варшава","Краков","Вроцлав","Гданьск","Познань","Катовице"];
+const YARDS = ["Berlin","Hamburg","München","Frankfurt","Köln","Stuttgart","Hannover","Leipzig","Dresden","Nürnberg","Bremen","Düsseldorf","Mannheim","Dortmund"];
+let LANG="ru", lastTotal=0, lastDest="pl";
+
+const T={
+ ru:{h1:"Калькулятор стоимости",sub:"Полная цена авто с аукциона до вашего города. Тот же расчёт, что в боте.",l_dir:"Направление",dir_uspl:"🇺🇸 США → 🇵🇱 Польша",dir_usby:"🇺🇸 США → 🇧🇾 Беларусь",dir_depl:"🇩🇪 Германия → 🇵🇱 Польша",l_price_usd:"Цена лота, $",l_price_eur:"Цена лота, €",l_year:"Год",l_engine:"Объём, см³",l_fuel:"Топливо",f_petrol:"Бензин",f_diesel:"Дизель",f_electric:"Электро",f_hybrid:"Гибрид",f_plugin:"Plug-in",l_region:"Регион США",rg_east:"Восток",rg_south:"Юг",rg_west:"Запад",l_city:"Город (Польша)",l_route:"Маршрут доставки",rt_turkey:"Турция",l_benefit:"Льгота на пошлину (−50%)",l_yard:"Ярд (Германия)",l_vat:"Цена с НДС (MwSt)",l_deliv:"Доставка",dv_trailer:"Автовозом",dv_self:"Своим ходом",btn_calc:"Рассчитать",biz_title:"Бизнес — прибыль от перепродажи",biz_sub:"Рыночная цена по живым объявлениям + ваша прибыль.",l_make:"Марка",l_model:"Модель",l_body:"Кузов",l_repair:"Стоимость ремонта, €",btn_biz:"Оценить прибыль",foot:"© 2026 BidCar · расчёт из того же кода, что и бот",r_total:"ИТОГО до города",r_price:"Цена авто",r_fees:"Сборы аукциона",r_delivery:"Доставка",r_customs:"Растаможка",r_reg:"Оформление",r_oc:"OC-страховка (год, ориентир)",calc:"Считаю…",err:"Не удалось посчитать. Попробуй позже.",binvest:"Вложено всего",bsale:"Рыночная цена",bprofit:"Прибыль",byear:"за {y} г.",bmodel:"по модели {a}–{b}",bfew:"Мало объявлений — оценка ориентировочная",bcnt:"{n} объяв."},
+ pl:{h1:"Kalkulator kosztów",sub:"Pełna cena auta z aukcji do Twojego miasta. Ten sam wynik co w bocie.",l_dir:"Kierunek",dir_uspl:"🇺🇸 USA → 🇵🇱 Polska",dir_usby:"🇺🇸 USA → 🇧🇾 Białoruś",dir_depl:"🇩🇪 Niemcy → 🇵🇱 Polska",l_price_usd:"Cena lotu, $",l_price_eur:"Cena lotu, €",l_year:"Rok",l_engine:"Pojemność, cm³",l_fuel:"Paliwo",f_petrol:"Benzyna",f_diesel:"Diesel",f_electric:"Elektryczny",f_hybrid:"Hybryda",f_plugin:"Plug-in",l_region:"Region USA",rg_east:"Wschód",rg_south:"Południe",rg_west:"Zachód",l_city:"Miasto (Polska)",l_route:"Trasa dostawy",rt_turkey:"Turcja",l_benefit:"Ulga na cło (−50%)",l_yard:"Plac (Niemcy)",l_vat:"Cena z VAT (MwSt)",l_deliv:"Dostawa",dv_trailer:"Lawetą",dv_self:"Własnym transportem",btn_calc:"Oblicz",biz_title:"Biznes — zysk z odsprzedaży",biz_sub:"Cena rynkowa z ofert + Twój zysk.",l_make:"Marka",l_model:"Model",l_body:"Nadwozie",l_repair:"Koszt naprawy, €",btn_biz:"Oszacuj zysk",foot:"© 2026 BidCar · ten sam kod co bot",r_total:"RAZEM do miasta",r_price:"Cena auta",r_fees:"Opłaty aukcji",r_delivery:"Dostawa",r_customs:"Cło",r_reg:"Rejestracja",r_oc:"OC (rok, orientacyjnie)",calc:"Liczę…",err:"Nie udało się obliczyć. Spróbuj później.",binvest:"Zainwestowane",bsale:"Cena rynkowa",bprofit:"Zysk",byear:"za {y} r.",bmodel:"model {a}–{b}",bfew:"Mało ofert — wycena orientacyjna",bcnt:"{n} ofert"},
+ en:{h1:"Cost calculator",sub:"Full landed cost of an auction car to your city. Same result as the bot.",l_dir:"Direction",dir_uspl:"🇺🇸 USA → 🇵🇱 Poland",dir_usby:"🇺🇸 USA → 🇧🇾 Belarus",dir_depl:"🇩🇪 Germany → 🇵🇱 Poland",l_price_usd:"Lot price, $",l_price_eur:"Lot price, €",l_year:"Year",l_engine:"Engine, cc",l_fuel:"Fuel",f_petrol:"Petrol",f_diesel:"Diesel",f_electric:"Electric",f_hybrid:"Hybrid",f_plugin:"Plug-in",l_region:"US region",rg_east:"East",rg_south:"South",rg_west:"West",l_city:"City (Poland)",l_route:"Delivery route",rt_turkey:"Turkey",l_benefit:"Duty benefit (−50%)",l_yard:"Yard (Germany)",l_vat:"Price incl. VAT (MwSt)",l_deliv:"Delivery",dv_trailer:"By trailer",dv_self:"Self-drive",btn_calc:"Calculate",biz_title:"Business — resale profit",biz_sub:"Market price from live listings + your profit.",l_make:"Make",l_model:"Model",l_body:"Body",l_repair:"Repair cost, €",btn_biz:"Estimate profit",foot:"© 2026 BidCar · same code as the bot",r_total:"TOTAL to city",r_price:"Car price",r_fees:"Auction fees",r_delivery:"Delivery",r_customs:"Customs",r_reg:"Paperwork",r_oc:"OC insurance (year, approx)",calc:"Calculating…",err:"Couldn't calculate. Try later.",binvest:"Total invested",bsale:"Market price",bprofit:"Profit",byear:"for {y}",bmodel:"model {a}–{b}",bfew:"Few listings — approximate",bcnt:"{n} listings"},
+ uk:{h1:"Калькулятор вартості",sub:"Повна ціна авто з аукціону до вашого міста. Той самий розрахунок, що в боті.",l_dir:"Напрямок",dir_uspl:"🇺🇸 США → 🇵🇱 Польща",dir_usby:"🇺🇸 США → 🇧🇾 Білорусь",dir_depl:"🇩🇪 Німеччина → 🇵🇱 Польща",l_price_usd:"Ціна лоту, $",l_price_eur:"Ціна лоту, €",l_year:"Рік",l_engine:"Обʼєм, см³",l_fuel:"Пальне",f_petrol:"Бензин",f_diesel:"Дизель",f_electric:"Електро",f_hybrid:"Гібрид",f_plugin:"Plug-in",l_region:"Регіон США",rg_east:"Схід",rg_south:"Південь",rg_west:"Захід",l_city:"Місто (Польща)",l_route:"Маршрут доставки",rt_turkey:"Туреччина",l_benefit:"Пільга на мито (−50%)",l_yard:"Ярд (Німеччина)",l_vat:"Ціна з ПДВ (MwSt)",l_deliv:"Доставка",dv_trailer:"Автовозом",dv_self:"Своїм ходом",btn_calc:"Розрахувати",biz_title:"Бізнес — прибуток від перепродажу",biz_sub:"Ринкова ціна з оголошень + ваш прибуток.",l_make:"Марка",l_model:"Модель",l_body:"Кузов",l_repair:"Вартість ремонту, €",btn_biz:"Оцінити прибуток",foot:"© 2026 BidCar · той самий код, що й бот",r_total:"РАЗОМ до міста",r_price:"Ціна авто",r_fees:"Збори аукціону",r_delivery:"Доставка",r_customs:"Розмитнення",r_reg:"Оформлення",r_oc:"OC-страховка (рік, орієнтир)",calc:"Рахую…",err:"Не вдалося порахувати. Спробуй пізніше.",binvest:"Вкладено всього",bsale:"Ринкова ціна",bprofit:"Прибуток",byear:"за {y} р.",bmodel:"по моделі {a}–{b}",bfew:"Мало оголошень — оцінка орієнтовна",bcnt:"{n} оголошень"}
+};
+function t(k){return (T[LANG][k]!=null?T[LANG][k]:T.ru[k])||k}
+function applyLang(){
+  document.documentElement.lang=LANG;
+  document.querySelectorAll('[data-i]').forEach(el=>{const k=el.getAttribute('data-i');if(T[LANG][k]!=null)el.innerHTML=T[LANG][k];});
+  document.querySelectorAll('#langs button').forEach(b=>b.classList.toggle('on',b.dataset.l===LANG));
+  document.getElementById('lbl_price').setAttribute('data-i', dir()==='de-pl'?'l_price_eur':'l_price_usd');
+  document.getElementById('lbl_price').innerHTML = dir()==='de-pl'?t('l_price_eur'):t('l_price_usd');
+}
+document.getElementById('langs').onclick=e=>{if(e.target.dataset.l){LANG=e.target.dataset.l;applyLang();}};
+
+function dir(){return document.getElementById('dir').value}
+function fill(sel,arr,val,lab){sel.innerHTML='';arr.forEach(o=>{const op=document.createElement('option');op.value=val(o);op.textContent=lab(o);sel.appendChild(op);});}
+// заполнить статические селекты
+document.querySelectorAll('.city_pl').forEach(s=>fill(s,CITIES,x=>x,x=>x));
+fill(document.getElementById('yard'),YARDS,x=>x,x=>x);
+
+function switchDir(){
+  const d=dir();
+  document.getElementById('f_uspl').classList.toggle('hidden',d!=='us-pl');
+  document.getElementById('f_usby').classList.toggle('hidden',d!=='us-by');
+  document.getElementById('f_depl').classList.toggle('hidden',d!=='de-pl');
+  applyLang();
+  document.getElementById('result').classList.add('hidden');
+  document.getElementById('biz').classList.add('hidden');
+}
+document.getElementById('dir').onchange=switchDir;
+
+function money(n){return Math.round(n).toLocaleString('ru-RU')+' €';}
+function rowHTML(label,val){return `<div class="row"><span>${label}</span><span>${money(val)}</span></div>`;}
+
+document.getElementById('calc').onclick=async()=>{
+  const d=dir(), err=document.getElementById('err'), res=document.getElementById('result');
+  err.classList.add('hidden'); res.classList.remove('hidden'); res.innerHTML=`<div class="spin">${t('calc')}</div>`;
+  const base={year:+val('year'),engine_cc:+val('engine'),fuel:val('fuel')};
+  let url,body;
+  if(d==='us-pl'){url='/calc/us-pl';body={...base,price_usd:+val('price'),region:val('region'),goal:'resell'};}
+  else if(d==='us-by'){url='/calc/us-by';body={...base,price_usd:+val('price'),route:val('route'),benefit:document.getElementById('benefit').checked};}
+  else{url='/calc/de';body={...base,price:+val('price'),city:document.getElementById('city_pl2').value,yard:val('yard'),goal:'self',has_vat:document.getElementById('vat').checked,delivery_type:val('deliv')};}
+  try{
+    const r=await fetch(API+url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(!r.ok) throw new Error();
+    const j=await r.json();
+    renderResult(d,j);
+  }catch(e){res.classList.add('hidden');err.textContent=t('err');err.classList.remove('hidden');}
+};
+function val(id){return document.getElementById(id).value;}
+
+function renderResult(d,j){
+  lastTotal=j.total; lastDest=j.destination;
+  let rows='';
+  if(d==='us-by'){
+    rows+=rowHTML(t('r_price'),j.price_eur)+rowHTML(t('r_fees'),j.fees_eur)
+      +rowHTML(t('r_delivery')+' · '+j.delivery.label,j.delivery.total)
+      +rowHTML(t('r_customs'),j.customs.total);
+  }else if(d==='us-pl'){
+    const u=j.usa;
+    rows+=rowHTML(t('r_price'),u.price_eur)+rowHTML(t('r_fees'),u.fees_eur)
+      +rowHTML(t('r_delivery'),u.inland_eur+u.ocean_eur+u.eu_delivery)
+      +rowHTML(t('r_customs'),u.customs_total)+rowHTML(t('r_reg'),j.registration+j.adaptation);
+  }else{
+    rows+=rowHTML(t('r_price'),j.price+ (j.car_vat||0))+rowHTML(t('r_fees'),j.fees.total)
+      +rowHTML(t('r_delivery'),j.delivery_cost)+rowHTML(t('r_customs'),j.customs.total)
+      +rowHTML(t('r_reg'),j.registration);
+  }
+  const oc=j.oc_annual?`<div class="row"><span>${t('r_oc')}</span><span>${money(j.oc_annual)}</span></div>`:'';
+  document.getElementById('result').innerHTML=rows+`<div class="row total"><span>${t('r_total')}</span><span>${money(j.total)}</span></div>`+oc;
+  setupBiz(d);
+}
+
+// ── Бизнес ──
+async function setupBiz(d){
+  const biz=document.getElementById('biz'); biz.classList.remove('hidden');
+  document.getElementById('bizresult').innerHTML=''; document.getElementById('berr').classList.add('hidden');
+  const makeSel=document.getElementById('make'), modelSel=document.getElementById('model');
+  const bodyWrap=document.getElementById('body_wrap');
+  if(lastDest==='by'){
+    bodyWrap.style.display='none';
+    const r=await fetch(API+'/catalog/by/makes?popular=true');const j=await r.json();
+    fill(makeSel,j.makes,m=>m.id,m=>m.name);
+    loadByModels();
+    makeSel.onchange=loadByModels;
+  }else{
+    bodyWrap.style.display='';
+    const r=await fetch(API+'/catalog/pl/makes');const j=await r.json();
+    fill(makeSel,j.makes,m=>m,m=>m);
+    const rb=await fetch(API+'/catalog/pl/bodies');const jb=await rb.json();
+    fill(document.getElementById('body'),jb.bodies,b=>b.slug,b=>b.label);
+    loadPlModels();
+    makeSel.onchange=loadPlModels;
+  }
+}
+async function loadByModels(){const id=document.getElementById('make').value;const r=await fetch(API+'/catalog/by/models?make_id='+id);const j=await r.json();fill(document.getElementById('model'),j.models,m=>m.id,m=>m.name);}
+async function loadPlModels(){const mk=document.getElementById('make').value;const r=await fetch(API+'/catalog/pl/models?make='+encodeURIComponent(mk));const j=await r.json();fill(document.getElementById('model'),j.models,m=>m.slug,m=>m.label);}
+
+document.getElementById('calcbiz').onclick=async()=>{
+  const berr=document.getElementById('berr'),out=document.getElementById('bizresult');
+  berr.classList.add('hidden'); out.innerHTML=`<div class="spin">${t('calc')}</div>`;
+  const year=+val('year'),repair=+val('repair')||0;
+  let url,body;
+  if(lastDest==='by'){url='/resale/by';body={make_id:+val('make'),model_id:+val('model'),year,total:lastTotal,repair};}
+  else{url='/resale/pl';body={make_slug:val('make'),model_slug:val('model'),year,body_slug:val('body'),mileage:0,total:lastTotal,repair};}
+  try{
+    const r=await fetch(API+url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.detail||'');}
+    renderBiz(await r.json(),year);
+  }catch(e){out.innerHTML='';berr.textContent=(e.message||t('err'));berr.classList.remove('hidden');}
+};
+function renderBiz(j,year){
+  const yp=j.year_price, mp=j.model_price;
+  let mkt='<div class="mkt">';
+  if(yp) mkt+=`<div class="l"><span>${t('byear').replace('{y}',year)} · ${t('bcnt').replace('{n}',yp.count)}</span><b>${money(yp.median_eur)}</b></div>`;
+  if(mp) mkt+=`<div class="l"><span>${t('bmodel').replace('{a}',mp.y0).replace('{b}',mp.y1)} · ${t('bcnt').replace('{n}',mp.count)}</span><b>${money(mp.median_eur)}</b></div>`;
+  mkt+='</div>';
+  const pos=j.profit>=0, col=pos?'#48d18a':'#ff8a8a', bg=pos?'rgba(72,209,138,.12)':'rgba(255,138,138,.12)';
+  document.getElementById('bizresult').innerHTML=
+    `<div class="row"><span>${t('bsale')}</span><span>${money(j.sale_eur)}</span></div>`
+    +`<div class="row"><span>${t('binvest')}</span><span>${money(j.invest)}</span></div>`
+    +mkt
+    +`<div class="profit" style="color:${col};background:${bg}">${t('bprofit')}: ${pos?'+':''}${money(j.profit)} (${pos?'+':''}${j.margin}%)</div>`
+    +`<div style="text-align:center;margin-top:10px"><a href="${j.url}" target="_blank">${j.market==='onliner'?'Onliner':'Otomoto'} →</a></div>`;
+}
+switchDir(); applyLang();
+</script>
+</body>
+</html>
