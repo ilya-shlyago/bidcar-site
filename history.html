@@ -42,11 +42,17 @@
   .loginbtn{display:inline-flex;align-items:center;gap:9px;height:40px;padding:0 20px;border-radius:999px;background:#131314;border:1px solid #3a3a3c;color:#e3e3e3;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
   .loginbtn:hover{background:#1d1d1f;border-color:#555}
   .loginbtn svg{width:18px;height:18px}
-  .hi{display:flex;justify-content:space-between;gap:12px;padding:12px 2px;border-bottom:1px solid var(--line);font-size:14px}
-  .hi:last-child{border-bottom:none}
-  .hi .l{color:var(--mut)} .hi .l b{color:var(--ink)}
-  .hi .v{font-weight:700;white-space:nowrap} .hi .v.pos{color:#48d18a} .hi .v.neg{color:#ff8a8a}
-  .hdate{color:var(--mut);font-size:12px;margin-top:2px}
+  .hhead,.hrow{display:grid;grid-template-columns:1fr 110px 130px;gap:12px;align-items:center;padding:12px 2px}
+  .hhead{position:sticky;top:60px;background:#0e2246;color:var(--mut);font-size:11px;font-weight:700;
+    text-transform:uppercase;letter-spacing:.6px;border-bottom:1px solid var(--line);z-index:2}
+  .hhead span:nth-child(2),.hhead span:nth-child(3){text-align:right}
+  .hrow{border-bottom:1px solid var(--line);font-size:14px}
+  .hrow:last-child{border-bottom:none}
+  .hcar b{color:var(--ink)} .hcar{color:var(--ink)}
+  .hsub{color:var(--mut);font-size:12px;margin-top:3px}
+  .hcost{font-weight:700;text-align:right;white-space:nowrap}
+  .hprofit{font-weight:700;text-align:right;white-space:nowrap}
+  .hprofit .pos{color:#48d18a} .hprofit .neg{color:#ff8a8a} .hprofit .dash{color:var(--mut);font-weight:400}
 </style>
 </head>
 <body>
@@ -61,7 +67,7 @@
 
 <div class="wrap">
   <h1 data-i="h1">История расчётов</h1>
-  <div class="sub" data-i="sub">Ваши последние расчёты и оценки перепродажи.</div>
+  <div class="sub" data-i="sub">Ваши последние расчёты и оценки прибыли.</div>
 
   <!-- GATE -->
   <div class="card hidden" id="gate" style="text-align:center">
@@ -88,22 +94,22 @@ const GOOGLE_CLIENT_ID="791120373917-t1jhd97sub6fqgepf5kl6n290jq37nqj.apps.googl
 let LANG="ru", TOKEN=localStorage.getItem('bidcar_token')||null, ME=null;
 
 const T={
- ru:{h1:"История расчётов",sub:"Ваши последние расчёты и оценки перепродажи.",gate_title:"Вход",gate_sub:"Войдите, чтобы посмотреть историю.",foot:"© 2026 BidCar",to_calc:"Калькулятор",
+ ru:{h1:"История расчётов",sub:"Ваши последние расчёты и оценки прибыли.",gate_title:"Вход",gate_sub:"Войдите, чтобы посмотреть историю.",foot:"© 2026 BidCar",to_calc:"Калькулятор",
    f_petrol:"Бензин",f_diesel:"Дизель",f_electric:"Электро",f_hybrid:"Гибрид",f_plugin:"Plug-in",
    hist_empty:"Пока пусто — сделай первый расчёт в калькуляторе.",loading:"Загружаю…",err:"Не удалось загрузить.",autherr:"Не удалось войти. Попробуй ещё раз.",relogin:"Сессия истекла — войди заново.",
-   m_status:"Статус",m_free:"Free",q_prem:"⭐ Premium",m_left:"Осталось",logout:"Выйти",m_login:"Войти",m_calc:"Открыть калькулятор"},
- pl:{h1:"Historia obliczeń",sub:"Twoje ostatnie obliczenia i wyceny odsprzedaży.",gate_title:"Logowanie",gate_sub:"Zaloguj się, aby zobaczyć historię.",foot:"© 2026 BidCar",to_calc:"Kalkulator",
+   m_status:"Статус",m_free:"Free",q_prem:"⭐ Premium",m_left:"Осталось",logout:"Выйти",m_login:"Войти",m_calc:"Открыть калькулятор",col_car:"Авто",col_cost:"Стоимость",col_profit:"Прибыль"},
+ pl:{h1:"Historia obliczeń",sub:"Twoje ostatnie obliczenia i szacunki zysku.",gate_title:"Logowanie",gate_sub:"Zaloguj się, aby zobaczyć historię.",foot:"© 2026 BidCar",to_calc:"Kalkulator",
    f_petrol:"Benzyna",f_diesel:"Diesel",f_electric:"Elektryczny",f_hybrid:"Hybryda",f_plugin:"Plug-in",
    hist_empty:"Na razie pusto — wykonaj pierwsze obliczenie.",loading:"Ładuję…",err:"Nie udało się załadować.",autherr:"Logowanie nie powiodło się.",relogin:"Sesja wygasła — zaloguj się ponownie.",
-   m_status:"Status",m_free:"Free",q_prem:"⭐ Premium",m_left:"Pozostało",logout:"Wyloguj",m_login:"Zaloguj",m_calc:"Otwórz kalkulator"},
- en:{h1:"Calculation history",sub:"Your recent calculations and resale estimates.",gate_title:"Sign in",gate_sub:"Sign in to view your history.",foot:"© 2026 BidCar",to_calc:"Calculator",
+   m_status:"Status",m_free:"Free",q_prem:"⭐ Premium",m_left:"Pozostało",logout:"Wyloguj",m_login:"Zaloguj",m_calc:"Otwórz kalkulator",col_car:"Auto",col_cost:"Koszt",col_profit:"Zysk"},
+ en:{h1:"Calculation history",sub:"Your recent calculations and profit estimates.",gate_title:"Sign in",gate_sub:"Sign in to view your history.",foot:"© 2026 BidCar",to_calc:"Calculator",
    f_petrol:"Petrol",f_diesel:"Diesel",f_electric:"Electric",f_hybrid:"Hybrid",f_plugin:"Plug-in",
    hist_empty:"Empty yet — make your first calculation.",loading:"Loading…",err:"Couldn't load.",autherr:"Sign-in failed.",relogin:"Session expired — sign in again.",
-   m_status:"Status",m_free:"Free",q_prem:"⭐ Premium",m_left:"Left",logout:"Log out",m_login:"Sign in",m_calc:"Open calculator"},
- uk:{h1:"Історія розрахунків",sub:"Ваші останні розрахунки та оцінки перепродажу.",gate_title:"Вхід",gate_sub:"Увійдіть, щоб переглянути історію.",foot:"© 2026 BidCar",to_calc:"Калькулятор",
+   m_status:"Status",m_free:"Free",q_prem:"⭐ Premium",m_left:"Left",logout:"Log out",m_login:"Sign in",m_calc:"Open calculator",col_car:"Car",col_cost:"Cost",col_profit:"Profit"},
+ uk:{h1:"Історія розрахунків",sub:"Ваші останні розрахунки та оцінки прибутку.",gate_title:"Вхід",gate_sub:"Увійдіть, щоб переглянути історію.",foot:"© 2026 BidCar",to_calc:"Калькулятор",
    f_petrol:"Бензин",f_diesel:"Дизель",f_electric:"Електро",f_hybrid:"Гібрид",f_plugin:"Plug-in",
    hist_empty:"Поки порожньо — зроби перший розрахунок.",loading:"Завантажую…",err:"Не вдалося завантажити.",autherr:"Не вдалося увійти.",relogin:"Сесія завершилась — увійди знову.",
-   m_status:"Статус",m_free:"Free",q_prem:"⭐ Premium",m_left:"Залишилось",logout:"Вийти",m_login:"Увійти",m_calc:"Відкрити калькулятор"}
+   m_status:"Статус",m_free:"Free",q_prem:"⭐ Premium",m_left:"Залишилось",logout:"Вийти",m_login:"Увійти",m_calc:"Відкрити калькулятор",col_car:"Авто",col_cost:"Вартість",col_profit:"Прибуток"}
 };
 function t(k){return (T[LANG]&&T[LANG][k]!=null?T[LANG][k]:T.ru[k])||k}
 function applyLang(){
@@ -141,17 +147,20 @@ function _num(n){return Math.round(n||0).toLocaleString("ru-RU");}
 function renderHistory(items){
   const b=document.getElementById("histbody");
   if(!items.length){b.innerHTML=`<div class="sub" style="margin:0">${t("hist_empty")}</div>`;return;}
-  b.innerHTML=items.map(it=>{
-    const date=`<div class="hdate">${_hdate(it.ts)}</div>`;
-    const biz=(it.kind==='biz'||it.kind==='calc+biz')&&it.profit_eur!=null;
-    let right;
-    if(it.kind==='biz'){ const pos=(it.profit_eur||0)>=0; right=`<span class="v ${pos?'pos':'neg'}">${pos?'+':''}${_num(it.profit_eur)} € (${it.margin||0}%)</span>`; }
-    else { right=`<span class="v">${_num(it.total_eur)} €</span>`+(biz?` <span class="v ${(it.profit_eur||0)>=0?'pos':'neg'}">/ ${(it.profit_eur||0)>=0?'+':''}${_num(it.profit_eur)} €</span>`:''); }
-    const carline = (it.make||it.model)
+  const head=`<div class="hhead"><span>${t('col_car')}</span><span>${t('col_cost')}</span><span>${t('col_profit')}</span></div>`;
+  const rows=items.map(it=>{
+    const car=(it.make||it.model)
       ? `<b>${it.make||''} ${it.model||''}</b> ${it.year||''}`
-      : `${(_FLAG[it.country]||'')}→${(_FLAG[it.destination]||'')} · ${it.year||''} · ${it.engine_cc||''}cc · ${it.fuel?t('f_'+it.fuel):''}`;
-    return `<div class="hi"><div class="l">${carline}${date}</div>${right}</div>`;
+      : `${(_FLAG[it.country]||'')}→${(_FLAG[it.destination]||'')} ${it.year||''}`;
+    const meta=[]; if(it.engine_cc)meta.push(it.engine_cc+' cc'); if(it.fuel)meta.push(t('f_'+it.fuel));
+    const metaline=meta.length?`<div class="hsub">${meta.join(' · ')}</div>`:'';
+    const date=`<div class="hsub">${_hdate(it.ts)}</div>`;
+    const cost=(it.total_eur!=null)?`${_num(it.total_eur)} €`:'—';
+    let profit=`<span class="dash">—</span>`;
+    if(it.profit_eur!=null){const pos=it.profit_eur>=0;profit=`<span class="${pos?'pos':'neg'}">${pos?'+':''}${_num(it.profit_eur)} €${it.margin!=null?`<div class="hsub" style="text-align:right;color:inherit;opacity:.8">${it.margin}%</div>`:''}</span>`;}
+    return `<div class="hrow"><div class="hcar">${car}${metaline}${date}</div><div class="hcost">${cost}</div><div class="hprofit">${profit}</div></div>`;
   }).join("");
+  b.innerHTML=head+rows;
 }
 
 async function authFetch(url,opts){
