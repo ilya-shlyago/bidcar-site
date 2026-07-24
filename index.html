@@ -30,7 +30,18 @@
   .nav{display:flex;align-items:center;justify-content:space-between;height:66px}
   .logo{display:flex;align-items:center;gap:11px;font-weight:800;font-size:20px;letter-spacing:.3px}
   .logo svg{width:38px;height:38px;flex:none}
-  .nav-right{display:flex;align-items:center;gap:14px}
+  .nav-right{display:flex;align-items:center;gap:14px;position:relative}
+  .iconbtn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative}
+  .iconbtn:hover{border-color:var(--gold)}
+  .iconbtn svg{width:18px;height:18px}
+  .dot{position:absolute;top:-1px;right:-1px;width:9px;height:9px;border-radius:50%;background:#48d18a;border:2px solid var(--navy)}
+  .menu{position:absolute;top:52px;right:0;min-width:220px;background:#0e2246;border:1px solid var(--line);border-radius:12px;padding:8px;box-shadow:0 14px 34px rgba(0,0,0,.55);z-index:60}
+  .menu .mi{display:flex;justify-content:space-between;gap:10px;padding:9px 10px;font-size:14px;border-radius:8px;color:var(--ink)}
+  .menu .mi.muted{color:var(--mut);font-size:13px}
+  .menu a.mi{cursor:pointer}
+  .menu a.mi:hover{background:rgba(255,255,255,.05)}
+  .menu .sep{height:1px;background:var(--line);margin:6px 2px}
+  .menu .login{justify-content:center;background:rgba(233,185,73,.12);color:var(--gold);font-weight:700}
   .langs{display:flex;gap:2px;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;padding:3px}
   .langs button{background:none;border:none;color:var(--mut);font-size:13px;font-weight:600;padding:6px 9px;
     border-radius:7px;cursor:pointer;transition:.15s}
@@ -136,6 +147,8 @@
         <button data-l="en">EN</button>
         <button data-l="uk">UK</button>
       </div>
+      <button class="iconbtn" id="profile" aria-label="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"/></svg><span class="dot hidden" id="pdot"></span></button>
+      <div class="menu hidden" id="menu"></div>
       <a class="btn" href="https://t.me/bid_calculation_bot" target="_blank" data-i="nav_cta">Открыть бота</a>
     </div>
   </div>
@@ -280,12 +293,52 @@ const I = {
   d_title:"Оцінка перепродажу",d_r1:"Витрати (РАЗОМ)",d_r2:"Ремонт",d_r3:"Вкладено всього",d_m1:"за 2020 р.",d_m2:"по моделі 2016–2024",d_profit:"Прибуток",
   cta_h:"Готові порахувати свій лот?",cta_p:"Відкрийте BidCar у Telegram — перші 5 розрахунків безкоштовно, без реєстрації.",cta_btn:"Відкрити BidCar",foot_note:"© 2026 BidCar · розрахунок авто з аукціонів"}
 };
+let CURLANG='ru';
 function setLang(l){
+  CURLANG=l;
   document.documentElement.lang=l;
   document.querySelectorAll('[data-i]').forEach(el=>{const k=el.getAttribute('data-i');if(I[l][k]!=null)el.innerHTML=I[l][k];});
   document.querySelectorAll('#langs button').forEach(b=>b.classList.toggle('on',b.dataset.l===l));
+  if(window.renderMenu) renderMenu();
 }
 document.getElementById('langs').addEventListener('click',e=>{if(e.target.dataset.l)setLang(e.target.dataset.l);});
+
+// ── Профиль / аккаунт (общий с калькулятором токен) ──
+const API="https://bidcarapi.duckdns.org";
+let TOKEN=localStorage.getItem('bidcar_token')||null, ME=null;
+const MT={
+  ru:{login:"Войти",status:"Статус",free:"Free",prem:"⭐ Premium",left:"Осталось",logout:"Выйти",calc:"Открыть калькулятор"},
+  pl:{login:"Zaloguj",status:"Status",free:"Free",prem:"⭐ Premium",left:"Pozostało",logout:"Wyloguj",calc:"Otwórz kalkulator"},
+  en:{login:"Sign in",status:"Status",free:"Free",prem:"⭐ Premium",left:"Left",logout:"Log out",calc:"Open calculator"},
+  uk:{login:"Увійти",status:"Статус",free:"Free",prem:"⭐ Premium",left:"Залишилось",logout:"Вийти",calc:"Відкрити калькулятор"}
+};
+function mt(k){return (MT[CURLANG]&&MT[CURLANG][k])||MT.ru[k];}
+window.renderMenu=function(){
+  const menu=document.getElementById('menu');
+  if(TOKEN&&ME){
+    menu.innerHTML=`<div class="mi"><b>👤 ${ME.name||''}</b></div>`
+      +`<div class="mi muted"><span>${mt('status')}</span><span>${ME.premium?mt('prem'):mt('free')}</span></div>`
+      +(ME.premium?'':`<div class="mi muted"><span>${mt('left')}</span><span>${Math.max(0,ME.limit-ME.used)} / ${ME.limit}</span></div>`)
+      +`<div class="sep"></div>`
+      +`<a class="mi" href="calculator.html">${mt('calc')}</a>`
+      +`<a class="mi" id="mlogout">${mt('logout')}</a>`;
+    document.getElementById('mlogout').onclick=(e)=>{e.preventDefault();TOKEN=null;ME=null;localStorage.removeItem('bidcar_token');localStorage.removeItem('bidcar_name');document.getElementById('pdot').classList.add('hidden');closeMenu();renderMenu();};
+  }else{
+    menu.innerHTML=`<a class="mi login" href="calculator.html">${mt('login')}</a>`;
+  }
+};
+function closeMenu(){document.getElementById('menu').classList.add('hidden');}
+document.getElementById('profile').onclick=(e)=>{e.stopPropagation();const m=document.getElementById('menu');const was=m.classList.contains('hidden');renderMenu();m.classList.toggle('hidden',!was);};
+document.addEventListener('click',(e)=>{const m=document.getElementById('menu');if(!m.classList.contains('hidden')&&!e.target.closest('#menu')&&!e.target.closest('#profile'))closeMenu();});
+(async function(){
+  if(!TOKEN){renderMenu();return;}
+  try{const r=await fetch(API+'/me',{headers:{Authorization:'Bearer '+TOKEN}});
+    if(r.ok){ME=await r.json();ME.name=localStorage.getItem('bidcar_name');document.getElementById('pdot').classList.remove('hidden');}
+    else{TOKEN=null;localStorage.removeItem('bidcar_token');}
+  }catch(e){}
+  renderMenu();
+})();
+
 setLang('ru');
 </script>
 </body>
