@@ -308,7 +308,7 @@ function setLang(l){
 document.getElementById('langs').addEventListener('click',e=>{if(e.target.dataset.l)setLang(e.target.dataset.l);});
 
 // ── Профиль / аккаунт (общий с калькулятором токен) ──
-const API="https://bidcarapi.duckdns.org";
+const API="https://api.bidcar.org";
 let TOKEN=localStorage.getItem('bidcar_token')||null, ME=null;
 const MT={
   ru:{login:"Войти",status:"Статус",free:"Free",prem:"⭐ Premium",left:"Осталось",logout:"Выйти",calc:"Открыть калькулятор",history:"История"},
