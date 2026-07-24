@@ -308,10 +308,10 @@ document.getElementById('langs').addEventListener('click',e=>{if(e.target.datase
 const API="https://bidcarapi.duckdns.org";
 let TOKEN=localStorage.getItem('bidcar_token')||null, ME=null;
 const MT={
-  ru:{login:"Войти",status:"Статус",free:"Free",prem:"⭐ Premium",left:"Осталось",logout:"Выйти",calc:"Открыть калькулятор"},
-  pl:{login:"Zaloguj",status:"Status",free:"Free",prem:"⭐ Premium",left:"Pozostało",logout:"Wyloguj",calc:"Otwórz kalkulator"},
-  en:{login:"Sign in",status:"Status",free:"Free",prem:"⭐ Premium",left:"Left",logout:"Log out",calc:"Open calculator"},
-  uk:{login:"Увійти",status:"Статус",free:"Free",prem:"⭐ Premium",left:"Залишилось",logout:"Вийти",calc:"Відкрити калькулятор"}
+  ru:{login:"Войти",status:"Статус",free:"Free",prem:"⭐ Premium",left:"Осталось",logout:"Выйти",calc:"Открыть калькулятор",history:"История"},
+  pl:{login:"Zaloguj",status:"Status",free:"Free",prem:"⭐ Premium",left:"Pozostało",logout:"Wyloguj",calc:"Otwórz kalkulator",history:"Historia"},
+  en:{login:"Sign in",status:"Status",free:"Free",prem:"⭐ Premium",left:"Left",logout:"Log out",calc:"Open calculator",history:"History"},
+  uk:{login:"Увійти",status:"Статус",free:"Free",prem:"⭐ Premium",left:"Залишилось",logout:"Вийти",calc:"Відкрити калькулятор",history:"Історія"}
 };
 function mt(k){return (MT[CURLANG]&&MT[CURLANG][k])||MT.ru[k];}
 window.renderMenu=function(){
@@ -321,6 +321,7 @@ window.renderMenu=function(){
       +`<div class="mi muted"><span>${mt('status')}</span><span>${ME.premium?mt('prem'):mt('free')}</span></div>`
       +(ME.premium?'':`<div class="mi muted"><span>${mt('left')}</span><span>${Math.max(0,ME.limit-ME.used)} / ${ME.limit}</span></div>`)
       +`<div class="sep"></div>`
+      +`<a class="mi" href="calculator.html?history=1">${mt('history')}</a>`
       +`<a class="mi" href="calculator.html">${mt('calc')}</a>`
       +`<a class="mi" id="mlogout">${mt('logout')}</a>`;
     document.getElementById('mlogout').onclick=(e)=>{e.preventDefault();TOKEN=null;ME=null;localStorage.removeItem('bidcar_token');localStorage.removeItem('bidcar_name');document.getElementById('pdot').classList.add('hidden');closeMenu();renderMenu();};

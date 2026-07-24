@@ -36,7 +36,7 @@
     color:#25190a;font-weight:800;padding:15px;border:none;border-radius:12px;font-size:16px;cursor:pointer}
   .btn:disabled{opacity:.5;cursor:default}
   .btn-sec{background:transparent;color:var(--ink);border:1px solid var(--gold)}
-  .hidden{display:none}
+  .hidden{display:none !important}
   .row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,.09);font-size:15px}
   .row span:last-child{font-weight:700}
   .row.total{border:none;font-size:19px;padding-top:14px}
@@ -446,6 +446,7 @@ document.getElementById("histclose").onclick=(e)=>{e.preventDefault();document.g
 document.getElementById("histwrap").onclick=(e)=>{if(e.target.id==="histwrap")e.target.classList.add("hidden");};
 document.getElementById('tg-login').onclick=tgLogin;
 switchDir(); applyLang(); initAuth();
+if(location.search.indexOf('history=1')>=0){setTimeout(()=>{if(TOKEN)openHistory();},800);}
 </script>
 </body>
 </html>
