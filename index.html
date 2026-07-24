@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BidCar — авто с аукционов «под ключ»</title>
+<style>
+  :root{
+    --navy:#0a1a36; --navy2:#13294b; --panel:#0f2247; --panel2:#152c53;
+    --gold:#e9b949; --gold2:#f7d67a; --ink:#eaf1fb; --mut:#9db2d4; --line:rgba(255,255,255,.09);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--navy);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+  .gold{color:var(--gold)}
+  .btn{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(180deg,var(--gold2),var(--gold));
+    color:#25190a;font-weight:700;padding:14px 24px;border-radius:12px;font-size:16px;
+    transition:transform .15s ease,box-shadow .15s ease;box-shadow:0 8px 24px rgba(233,185,73,.28)}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(233,185,73,.4)}
+  .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none;font-weight:600}
+  .btn-ghost:hover{background:rgba(255,255,255,.05);transform:none;box-shadow:none}
+
+  /* header */
+  header{position:sticky;top:0;z-index:50;background:rgba(10,26,54,.82);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:66px}
+  .logo{display:flex;align-items:center;gap:11px;font-weight:800;font-size:20px;letter-spacing:.3px}
+  .logo svg{width:38px;height:38px;flex:none}
+  .nav-right{display:flex;align-items:center;gap:14px}
+  .langs{display:flex;gap:2px;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;padding:3px}
+  .langs button{background:none;border:none;color:var(--mut);font-size:13px;font-weight:600;padding:6px 9px;
+    border-radius:7px;cursor:pointer;transition:.15s}
+  .langs button.on{background:var(--gold);color:#25190a}
+  .nav .btn{padding:10px 16px;font-size:14px}
+
+  /* hero */
+  .hero{position:relative;overflow:hidden;padding:76px 0 66px}
+  .hero::before{content:"";position:absolute;inset:0;background:
+    radial-gradient(900px 480px at 72% 18%,rgba(42,74,122,.55),transparent 60%),
+    radial-gradient(700px 500px at 12% 90%,rgba(16,120,110,.22),transparent 55%);pointer-events:none}
+  .hero-grid{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
+  .tag{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--gold2);
+    border:1px solid rgba(233,185,73,.35);background:rgba(233,185,73,.08);padding:6px 13px;border-radius:999px;margin-bottom:20px}
+  h1{font-size:46px;line-height:1.12;font-weight:800;letter-spacing:-.5px;margin-bottom:18px}
+  .lead{font-size:18px;color:var(--mut);margin-bottom:28px;max-width:540px}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .hero-note{font-size:13px;color:var(--mut);margin-top:16px}
+  .hero-art{display:flex;justify-content:center}
+  .hero-art svg{width:100%;max-width:360px;height:auto;filter:drop-shadow(0 20px 40px rgba(0,0,0,.45))}
+
+  /* sections */
+  section{padding:64px 0;border-top:1px solid var(--line)}
+  .eyebrow{color:var(--gold);font-weight:700;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px}
+  h2{font-size:32px;font-weight:800;letter-spacing:-.3px;margin-bottom:14px}
+  .sub{color:var(--mut);font-size:17px;max-width:640px;margin-bottom:38px}
+  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);
+    border-radius:16px;padding:24px 22px;transition:.2s}
+  .card:hover{border-color:rgba(233,185,73,.4);transform:translateY(-3px)}
+  .card .ic{font-size:26px;margin-bottom:14px}
+  .card h3{font-size:17px;margin-bottom:8px}
+  .card p{color:var(--mut);font-size:14px}
+
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .step{position:relative;padding:26px 22px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:16px}
+  .step .n{width:38px;height:38px;border-radius:10px;background:var(--gold);color:#25190a;font-weight:800;
+    display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:16px}
+  .step h3{font-size:18px;margin-bottom:8px}
+  .step p{color:var(--mut);font-size:14px}
+
+  .routes{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
+  .chip{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border:1px solid var(--line);
+    padding:11px 16px;border-radius:12px;font-size:14px;color:var(--ink)}
+  .chip b{color:var(--gold2)}
+  .flow{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:22px;font-weight:700;margin-bottom:26px}
+  .flow .from,.flow .to{display:inline-flex;gap:6px}
+  .flow .arrow{color:var(--gold);font-size:26px}
+
+  /* resale demo */
+  .demo{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center}
+  .receipt{background:linear-gradient(180deg,#0e2246,#0b1c3d);border:1px solid var(--line);border-radius:18px;
+    padding:26px 26px;font-size:15px;box-shadow:0 20px 50px rgba(0,0,0,.4)}
+  .receipt .rtitle{font-weight:800;font-size:16px;margin-bottom:6px}
+  .receipt .car{color:var(--mut);margin-bottom:18px;font-size:14px}
+  .row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed rgba(255,255,255,.08)}
+  .row span:last-child{font-weight:700}
+  .row.big{border:none;padding-top:16px;font-size:18px}
+  .row.big span:last-child{color:#48d18a}
+  .mkt{margin:14px 0;padding:14px 16px;background:rgba(233,185,73,.07);border:1px solid rgba(233,185,73,.22);border-radius:12px}
+  .mkt .l{display:flex;justify-content:space-between;font-size:14px;padding:4px 0;color:var(--mut)}
+  .mkt .l b{color:var(--ink)}
+
+  /* CTA */
+  .cta{text-align:center;background:linear-gradient(180deg,rgba(233,185,73,.10),transparent);border-radius:22px;
+    padding:56px 24px;border:1px solid rgba(233,185,73,.22)}
+  .cta h2{font-size:34px}
+  .cta p{color:var(--mut);font-size:17px;max-width:520px;margin:0 auto 28px}
+
+  footer{border-top:1px solid var(--line);padding:34px 0;color:var(--mut);font-size:13px}
+  .foot{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+
+  @media(max-width:860px){
+    .hero-grid{grid-template-columns:1fr;gap:20px}.hero-art{order:-1;max-width:260px;margin:0 auto}
+    h1{font-size:34px}.cards{grid-template-columns:1fr 1fr}.steps{grid-template-columns:1fr}
+    .demo{grid-template-columns:1fr}.nav .btn{display:none}
+  }
+  @media(max-width:520px){.cards{grid-template-columns:1fr}h1{font-size:29px}h2{font-size:26px}}
+</style>
+</head>
+<body>
+
+<!-- car mark reused as inline symbol -->
+<svg width="0" height="0" style="position:absolute"><defs>
+  <linearGradient id="gg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f7d67a"/><stop offset="1" stop-color="#c9962f"/></linearGradient>
+  <symbol id="carmark" viewBox="0 0 512 512">
+    <rect width="512" height="512" rx="116" fill="#0f2a52"/>
+    <path d="M84 292 L96 268 C100 259 108 253 118 252 L206 242 L268 205 C280 198 293 194 307 194 L336 194 C356 194 375 202 389 216 L420 247 C433 250 442 258 444 270 L446 286 C447 292 443 296 437 296 L96 296 C88 296 84 294 84 290 Z" fill="#fff"/>
+    <path d="M214 240 L268 214 C279 208 291 205 304 205 L332 205 C352 205 369 213 381 227 L214 240 Z" fill="#8fb4de"/>
+    <circle cx="176" cy="300" r="30" fill="#0a1a36"/><circle cx="176" cy="300" r="30" fill="none" stroke="url(#gg)" stroke-width="5"/><circle cx="176" cy="300" r="10" fill="#e7ecf3"/>
+    <circle cx="356" cy="300" r="30" fill="#0a1a36"/><circle cx="356" cy="300" r="30" fill="none" stroke="url(#gg)" stroke-width="5"/><circle cx="356" cy="300" r="10" fill="#e7ecf3"/>
+    <rect x="120" y="344" width="272" height="6" rx="3" fill="url(#gg)"/>
+  </symbol>
+</defs></svg>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#top"><svg><use href="#carmark"/></svg> Bid<span class="gold">Car</span></a>
+    <div class="nav-right">
+      <div class="langs" id="langs">
+        <button data-l="ru" class="on">RU</button>
+        <button data-l="pl">PL</button>
+        <button data-l="en">EN</button>
+        <button data-l="uk">UK</button>
+      </div>
+      <a class="btn" href="https://t.me/bid_calculation_bot" target="_blank" data-i="nav_cta">Открыть бота</a>
+    </div>
+  </div>
+</header>
+
+<a id="top"></a>
+<section class="hero" style="border:none">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="tag">✈️ Copart · IAAI · <span data-i="hero_tag">аукционы США и Германии</span></span>
+      <h1 data-i="hero_h1">Полная стоимость авто с аукциона — <span class="gold">за минуту</span></h1>
+      <p class="lead" data-i="hero_lead">Ставка, сборы, доставка, растаможка и оформление — считаем всё до вашего города в Польше или Беларуси. Без сюрпризов на таможне.</p>
+      <div class="hero-cta">
+        <a class="btn" href="https://t.me/bid_calculation_bot" target="_blank">✈️ <span data-i="hero_cta">Открыть в Telegram</span></a>
+        <a class="btn btn-ghost" href="#how" data-i="hero_cta2">Как это работает</a>
+      </div>
+      <div class="hero-note" data-i="hero_note">Первые 5 расчётов — бесплатно · 🇷🇺 🇵🇱 🇬🇧 🇺🇦</div>
+    </div>
+    <div class="hero-art"><svg><use href="#carmark"/></svg></div>
+  </div>
+</section>
+
+<section id="what">
+  <div class="wrap">
+    <div class="eyebrow" data-i="what_eye">Что считаем</div>
+    <h2 data-i="what_h2">Всё, что влияет на итоговую цену</h2>
+    <p class="sub" data-i="what_sub">Не только ставка на аукционе — а реальная сумма, которую вы заплатите до постановки на учёт.</p>
+    <div class="cards">
+      <div class="card"><div class="ic">🚚</div><h3 data-i="c1_h">Доставка</h3><p data-i="c1_p">Наземная в США, океан-контейнер, маршруты Клайпеда / Поти / Турция.</p></div>
+      <div class="card"><div class="ic">🛃</div><h3 data-i="c2_h">Растаможка</h3><p data-i="c2_p">Пошлина, акциз, НДС, утильсбор — по правилам Польши и Беларуси, с учётом льгот.</p></div>
+      <div class="card"><div class="ic">📋</div><h3 data-i="c3_h">Оформление</h3><p data-i="c3_p">Регистрация, техосмотр, перевод документов, страховка OC.</p></div>
+      <div class="card"><div class="ic">📈</div><h3 data-i="c4_h">Прибыль перекупа</h3><p data-i="c4_p">Рыночная цена по объявлениям и ваша маржа — за конкретный год и по модели.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="eyebrow" data-i="how_eye">Как это работает</div>
+    <h2 data-i="how_h2">Три шага до точной цифры</h2>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h3 data-i="s1_h">Выбираете авто</h3><p data-i="s1_p">Страна аукциона, цена лота, год, объём двигателя, топливо — всё кнопками.</p></div>
+      <div class="step"><div class="n">2</div><h3 data-i="s2_h">Указываете маршрут</h3><p data-i="s2_p">Куда везём и как: город в Польше или маршрут доставки в Беларусь, льгота на пошлину.</p></div>
+      <div class="step"><div class="n">3</div><h3 data-i="s3_h">Получаете расчёт</h3><p data-i="s3_p">Полная стоимость до вашего города в евро — с разбивкой по каждому этапу.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="routes">
+  <div class="wrap">
+    <div class="eyebrow" data-i="r_eye">Откуда и куда</div>
+    <div class="flow">
+      <span class="from">🇺🇸 🇩🇪</span><span class="arrow">→</span><span class="to">🇵🇱 🇧🇾</span>
+    </div>
+    <p class="sub" data-i="r_sub">Аукционы Copart в США и Германии → доставка в Польшу или Беларусь. Для Беларуси — актуальные маршруты в обход санкционных ограничений.</p>
+    <div class="routes">
+      <div class="chip">🚢 <b>Клайпеда</b> · <span data-i="rt1">Литва · 1–1.5 мес</span></div>
+      <div class="chip">🚢 <b>Поти</b> · <span data-i="rt2">Грузия · ~3 мес</span></div>
+      <div class="chip">🚢 <b>Турция</b> · <span data-i="rt3">1.5–2 мес</span></div>
+      <div class="chip">🇵🇱 <b>Gdynia</b> · <span data-i="rt4">порт ЕС → город</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="resale">
+  <div class="wrap">
+    <div class="eyebrow" data-i="rs_eye">Режим перекупа</div>
+    <h2 data-i="rs_h2">Купить, чтобы заработать</h2>
+    <div class="demo">
+      <div>
+        <p class="sub" data-i="rs_sub">BidCar сам находит рыночную цену по живым объявлениям — за конкретный год и в среднем по модели — и показывает вашу прибыль с учётом ремонта. Никакого «на глаз».</p>
+        <a class="btn" href="https://t.me/bid_calculation_bot" target="_blank">✈️ <span data-i="rs_cta">Попробовать в боте</span></a>
+      </div>
+      <div class="receipt">
+        <div class="rtitle">📈 <span data-i="d_title">Оценка перепродажи</span></div>
+        <div class="car">🚗 BMW X3, 2020 · 🇧🇾</div>
+        <div class="row"><span data-i="d_r1">Затраты (ИТОГО)</span><span>25 000 €</span></div>
+        <div class="row"><span data-i="d_r2">Ремонт</span><span>1 500 €</span></div>
+        <div class="row"><span data-i="d_r3">Вложено всего</span><span>26 500 €</span></div>
+        <div class="mkt">
+          <div class="l"><span data-i="d_m1">за 2020 г.</span><b>31 446 €</b></div>
+          <div class="l"><span data-i="d_m2">по модели 2016–2024</span><b>29 500 €</b></div>
+        </div>
+        <div class="row big"><span data-i="d_profit">Прибыль</span><span>+4 946 € (+19%)</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="cta">
+      <h2 data-i="cta_h">Готовы посчитать свой лот?</h2>
+      <p data-i="cta_p">Откройте BidCar в Telegram — первые 5 расчётов бесплатно, без регистрации.</p>
+      <a class="btn" href="https://t.me/bid_calculation_bot" target="_blank" style="font-size:17px;padding:16px 30px">✈️ <span data-i="cta_btn">Открыть @bid_calculation_bot</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <div class="logo" style="font-size:17px"><svg style="width:28px;height:28px"><use href="#carmark"/></svg> Bid<span class="gold">Car</span></div>
+    <div data-i="foot_note">© 2026 BidCar · расчёт авто с аукционов Copart</div>
+  </div>
+</footer>
+
+<script>
+const I = {
+  ru:{nav_cta:"Открыть бота",hero_tag:"аукционы США и Германии",hero_h1:'Полная стоимость авто с аукциона — <span class="gold">за минуту</span>',hero_lead:"Ставка, сборы, доставка, растаможка и оформление — считаем всё до вашего города в Польше или Беларуси. Без сюрпризов на таможне.",hero_cta:"Открыть в Telegram",hero_cta2:"Как это работает",hero_note:"Первые 5 расчётов — бесплатно · 🇷🇺 🇵🇱 🇬🇧 🇺🇦",
+  what_eye:"Что считаем",what_h2:"Всё, что влияет на итоговую цену",what_sub:"Не только ставка на аукционе — а реальная сумма, которую вы заплатите до постановки на учёт.",
+  c1_h:"Доставка",c1_p:"Наземная в США, океан-контейнер, маршруты Клайпеда / Поти / Турция.",c2_h:"Растаможка",c2_p:"Пошлина, акциз, НДС, утильсбор — по правилам Польши и Беларуси, с учётом льгот.",c3_h:"Оформление",c3_p:"Регистрация, техосмотр, перевод документов, страховка OC.",c4_h:"Прибыль перекупа",c4_p:"Рыночная цена по объявлениям и ваша маржа — за конкретный год и по модели.",
+  how_eye:"Как это работает",how_h2:"Три шага до точной цифры",s1_h:"Выбираете авто",s1_p:"Страна аукциона, цена лота, год, объём двигателя, топливо — всё кнопками.",s2_h:"Указываете маршрут",s2_p:"Куда везём и как: город в Польше или маршрут доставки в Беларусь, льгота на пошлину.",s3_h:"Получаете расчёт",s3_p:"Полная стоимость до вашего города в евро — с разбивкой по каждому этапу.",
+  r_eye:"Откуда и куда",r_sub:"Аукционы Copart в США и Германии → доставка в Польшу или Беларусь. Для Беларуси — актуальные маршруты в обход санкционных ограничений.",rt1:"Литва · 1–1.5 мес",rt2:"Грузия · ~3 мес",rt3:"1.5–2 мес",rt4:"порт ЕС → город",
+  rs_eye:"Режим перекупа",rs_h2:"Купить, чтобы заработать",rs_sub:"BidCar сам находит рыночную цену по живым объявлениям — за конкретный год и в среднем по модели — и показывает вашу прибыль с учётом ремонта. Никакого «на глаз».",rs_cta:"Попробовать в боте",
+  d_title:"Оценка перепродажи",d_r1:"Затраты (ИТОГО)",d_r2:"Ремонт",d_r3:"Вложено всего",d_m1:"за 2020 г.",d_m2:"по модели 2016–2024",d_profit:"Прибыль",
+  cta_h:"Готовы посчитать свой лот?",cta_p:"Откройте BidCar в Telegram — первые 5 расчётов бесплатно, без регистрации.",cta_btn:"Открыть @bid_calculation_bot",foot_note:"© 2026 BidCar · расчёт авто с аукционов Copart"},
+
+  pl:{nav_cta:"Otwórz bota",hero_tag:"aukcje USA i Niemiec",hero_h1:'Pełny koszt auta z aukcji — <span class="gold">w minutę</span>',hero_lead:"Cena, opłaty, transport, cło i rejestracja — liczymy wszystko do Twojego miasta w Polsce lub na Białorusi. Bez niespodzianek na cle.",hero_cta:"Otwórz w Telegramie",hero_cta2:"Jak to działa",hero_note:"Pierwsze 5 wyliczeń — za darmo · 🇷🇺 🇵🇱 🇬🇧 🇺🇦",
+  what_eye:"Co liczymy",what_h2:"Wszystko, co wpływa na cenę końcową",what_sub:"Nie tylko cena na aukcji — realna kwota, którą zapłacisz do rejestracji.",
+  c1_h:"Transport",c1_p:"Lądowy w USA, kontener morski, trasy Kłajpeda / Poti / Turcja.",c2_h:"Cło",c2_p:"Cło, akcyza, VAT, opłata recyklingowa — wg zasad Polski i Białorusi, z ulgami.",c3_h:"Rejestracja",c3_p:"Rejestracja, przegląd, tłumaczenie dokumentów, ubezpieczenie OC.",c4_h:"Zysk handlarza",c4_p:"Cena rynkowa z ofert i Twoja marża — za dany rok i wg modelu.",
+  how_eye:"Jak to działa",how_h2:"Trzy kroki do dokładnej kwoty",s1_h:"Wybierasz auto",s1_p:"Kraj aukcji, cena, rok, pojemność, paliwo — wszystko przyciskami.",s2_h:"Wskazujesz trasę",s2_p:"Dokąd i jak: miasto w Polsce lub trasa dostawy na Białoruś, ulga na cło.",s3_h:"Dostajesz wynik",s3_p:"Pełny koszt do Twojego miasta w euro — z rozbiciem na każdy etap.",
+  r_eye:"Skąd i dokąd",r_sub:"Aukcje Copart w USA i Niemczech → dostawa do Polski lub na Białoruś. Dla Białorusi — aktualne trasy omijające ograniczenia sankcyjne.",rt1:"Litwa · 1–1.5 mies",rt2:"Gruzja · ~3 mies",rt3:"1.5–2 mies",rt4:"port UE → miasto",
+  rs_eye:"Tryb handlarza",rs_h2:"Kup, żeby zarobić",rs_sub:"BidCar sam znajduje cenę rynkową z żywych ofert — za dany rok i średnio wg modelu — i pokazuje Twój zysk z uwzględnieniem naprawy. Żadnego „na oko”.",rs_cta:"Wypróbuj w bocie",
+  d_title:"Wycena odsprzedaży",d_r1:"Koszty (RAZEM)",d_r2:"Naprawa",d_r3:"Zainwestowane",d_m1:"za 2020 r.",d_m2:"model 2016–2024",d_profit:"Zysk",
+  cta_h:"Gotów policzyć swój lot?",cta_p:"Otwórz BidCar w Telegramie — pierwsze 5 wyliczeń za darmo, bez rejestracji.",cta_btn:"Otwórz @bid_calculation_bot",foot_note:"© 2026 BidCar · wycena aut z aukcji Copart"},
+
+  en:{nav_cta:"Open the bot",hero_tag:"US & Germany auctions",hero_h1:'Full landed cost of an auction car — <span class="gold">in a minute</span>',hero_lead:"Bid, fees, shipping, customs and paperwork — we calculate everything to your city in Poland or Belarus. No customs surprises.",hero_cta:"Open in Telegram",hero_cta2:"How it works",hero_note:"First 5 calculations free · 🇷🇺 🇵🇱 🇬🇧 🇺🇦",
+  what_eye:"What we calculate",what_h2:"Everything that affects the final price",what_sub:"Not just the auction bid — the real amount you pay before registration.",
+  c1_h:"Shipping",c1_p:"US inland, ocean container, routes Klaipeda / Poti / Turkey.",c2_h:"Customs",c2_p:"Duty, excise, VAT, recycling fee — per Poland & Belarus rules, with benefits.",c3_h:"Paperwork",c3_p:"Registration, inspection, document translation, OC insurance.",c4_h:"Reseller profit",c4_p:"Market price from listings and your margin — by exact year and by model.",
+  how_eye:"How it works",how_h2:"Three steps to an exact figure",s1_h:"Pick the car",s1_p:"Auction country, lot price, year, engine, fuel — all with buttons.",s2_h:"Set the route",s2_p:"Where and how: a city in Poland or a delivery route to Belarus, duty benefit.",s3_h:"Get the estimate",s3_p:"Full cost to your city in EUR — broken down by each stage.",
+  r_eye:"From and to",r_sub:"Copart auctions in the US and Germany → delivery to Poland or Belarus. For Belarus — current routes around sanction limits.",rt1:"Lithuania · 1–1.5 mo",rt2:"Georgia · ~3 mo",rt3:"1.5–2 mo",rt4:"EU port → city",
+  rs_eye:"Reseller mode",rs_h2:"Buy to earn",rs_sub:"BidCar finds the market price from live listings — for the exact year and model average — and shows your profit including repairs. No guesswork.",rs_cta:"Try it in the bot",
+  d_title:"Resale estimate",d_r1:"Costs (TOTAL)",d_r2:"Repair",d_r3:"Total invested",d_m1:"for 2020",d_m2:"model 2016–2024",d_profit:"Profit",
+  cta_h:"Ready to price your lot?",cta_p:"Open BidCar in Telegram — first 5 calculations free, no signup.",cta_btn:"Open @bid_calculation_bot",foot_note:"© 2026 BidCar · auction car cost calculator"},
+
+  uk:{nav_cta:"Відкрити бота",hero_tag:"аукціони США та Німеччини",hero_h1:'Повна вартість авто з аукціону — <span class="gold">за хвилину</span>',hero_lead:"Ставка, збори, доставка, розмитнення й оформлення — рахуємо все до вашого міста в Польщі чи Білорусі. Без сюрпризів на митниці.",hero_cta:"Відкрити в Telegram",hero_cta2:"Як це працює",hero_note:"Перші 5 розрахунків — безкоштовно · 🇷🇺 🇵🇱 🇬🇧 🇺🇦",
+  what_eye:"Що рахуємо",what_h2:"Усе, що впливає на кінцеву ціну",what_sub:"Не лише ставка на аукціоні — реальна сума, яку ви заплатите до постановки на облік.",
+  c1_h:"Доставка",c1_p:"Наземна в США, океан-контейнер, маршрути Клайпеда / Поті / Туреччина.",c2_h:"Розмитнення",c2_p:"Мито, акциз, ПДВ, утильзбір — за правилами Польщі та Білорусі, з пільгами.",c3_h:"Оформлення",c3_p:"Реєстрація, техогляд, переклад документів, страховка OC.",c4_h:"Прибуток перекупа",c4_p:"Ринкова ціна з оголошень і ваша маржа — за конкретний рік і по моделі.",
+  how_eye:"Як це працює",how_h2:"Три кроки до точної цифри",s1_h:"Обираєте авто",s1_p:"Країна аукціону, ціна лоту, рік, обʼєм, паливо — усе кнопками.",s2_h:"Вказуєте маршрут",s2_p:"Куди й як: місто в Польщі або маршрут доставки в Білорусь, пільга на мито.",s3_h:"Отримуєте розрахунок",s3_p:"Повна вартість до вашого міста в євро — з розбивкою по кожному етапу.",
+  r_eye:"Звідки й куди",r_sub:"Аукціони Copart у США та Німеччині → доставка в Польщу чи Білорусь. Для Білорусі — актуальні маршрути в обхід санкційних обмежень.",rt1:"Литва · 1–1.5 міс",rt2:"Грузія · ~3 міс",rt3:"1.5–2 міс",rt4:"порт ЄС → місто",
+  rs_eye:"Режим перекупа",rs_h2:"Купити, щоб заробити",rs_sub:"BidCar сам знаходить ринкову ціну за живими оголошеннями — за конкретний рік і в середньому по моделі — і показує ваш прибуток з урахуванням ремонту. Жодного «на око».",rs_cta:"Спробувати в боті",
+  d_title:"Оцінка перепродажу",d_r1:"Витрати (РАЗОМ)",d_r2:"Ремонт",d_r3:"Вкладено всього",d_m1:"за 2020 р.",d_m2:"по моделі 2016–2024",d_profit:"Прибуток",
+  cta_h:"Готові порахувати свій лот?",cta_p:"Відкрийте BidCar у Telegram — перші 5 розрахунків безкоштовно, без реєстрації.",cta_btn:"Відкрити @bid_calculation_bot",foot_note:"© 2026 BidCar · розрахунок авто з аукціонів Copart"}
+};
+function setLang(l){
+  document.documentElement.lang=l;
+  document.querySelectorAll('[data-i]').forEach(el=>{const k=el.getAttribute('data-i');if(I[l][k]!=null)el.innerHTML=I[l][k];});
+  document.querySelectorAll('#langs button').forEach(b=>b.classList.toggle('on',b.dataset.l===l));
+}
+document.getElementById('langs').addEventListener('click',e=>{if(e.target.dataset.l)setLang(e.target.dataset.l);});
+setLang('ru');
+</script>
+</body>
+</html>
