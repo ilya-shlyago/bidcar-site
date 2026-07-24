@@ -62,6 +62,20 @@
   <h1 data-i="h1">Калькулятор стоимости</h1>
   <div class="sub" data-i="sub">Полная цена авто с аукциона до вашего города.</div>
 
+  <!-- GATE: вход через Telegram -->
+  <div class="card" id="gate" style="text-align:center">
+    <div class="rtitle" data-i="gate_title">Вход через Telegram</div>
+    <div class="sub" style="margin:8px 0 18px" data-i="gate_sub">Войдите, чтобы пользоваться калькулятором. Лимит и Premium — общие с ботом.</div>
+    <div id="tg-btn" style="display:inline-block"></div>
+    <div class="err hidden" id="gerr"></div>
+  </div>
+
+  <!-- USER BAR -->
+  <div id="userbar" class="hidden" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-size:14px;color:var(--mut)">
+    <span id="uname"></span><span id="uquota"></span>
+  </div>
+
+  <div id="app" class="hidden">
   <div class="card">
     <label data-i="l_dir">Направление</label>
     <select id="dir">
@@ -133,6 +147,7 @@
     <div class="err hidden" id="berr"></div>
     <div id="bizresult"></div>
   </div>
+  </div><!-- /#app -->
 </div>
 
 <footer><span data-i="foot">© 2026 BidCar</span> · <a href="https://t.me/bid_calculation_bot" target="_blank">Telegram</a></footer>
@@ -149,6 +164,10 @@ const T={
  en:{h1:"Cost calculator",sub:"Full landed cost of an auction car to your city.",l_dir:"Direction",dir_uspl:"🇺🇸 USA → 🇵🇱 Poland",dir_usby:"🇺🇸 USA → 🇧🇾 Belarus",dir_depl:"🇩🇪 Germany → 🇵🇱 Poland",l_price_usd:"Lot price, $",l_price_eur:"Lot price, €",l_year:"Year",l_engine:"Engine, cc",l_fuel:"Fuel",f_petrol:"Petrol",f_diesel:"Diesel",f_electric:"Electric",f_hybrid:"Hybrid",f_plugin:"Plug-in",l_region:"US region",rg_east:"East",rg_south:"South",rg_west:"West",l_city:"City (Poland)",l_route:"Delivery route",rt_turkey:"Turkey",l_benefit:"Duty benefit (−50%)",l_yard:"Yard (Germany)",l_vat:"Price incl. VAT (MwSt)",l_deliv:"Delivery",dv_trailer:"By trailer",dv_self:"Self-drive",btn_calc:"Calculate",biz_title:"Business — resale profit",biz_sub:"Market price from live listings + your profit.",l_make:"Make",l_model:"Model",l_body:"Body",l_repair:"Repair cost, €",btn_biz:"Estimate profit",foot:"© 2026 BidCar",r_total:"TOTAL to city",r_price:"Car price",r_fees:"Auction fees",r_delivery:"Delivery",r_customs:"Customs",r_reg:"Paperwork",r_oc:"OC insurance (year, approx)",calc:"Calculating…",err:"Couldn't calculate. Try later.",binvest:"Total invested",bsale:"Market price",bprofit:"Profit",byear:"for {y}",bmodel:"model {a}–{b}",bfew:"Few listings — approximate",bcnt:"{n} listings"},
  uk:{h1:"Калькулятор вартості",sub:"Повна ціна авто з аукціону до вашого міста.",l_dir:"Напрямок",dir_uspl:"🇺🇸 США → 🇵🇱 Польща",dir_usby:"🇺🇸 США → 🇧🇾 Білорусь",dir_depl:"🇩🇪 Німеччина → 🇵🇱 Польща",l_price_usd:"Ціна лоту, $",l_price_eur:"Ціна лоту, €",l_year:"Рік",l_engine:"Обʼєм, см³",l_fuel:"Пальне",f_petrol:"Бензин",f_diesel:"Дизель",f_electric:"Електро",f_hybrid:"Гібрид",f_plugin:"Plug-in",l_region:"Регіон США",rg_east:"Схід",rg_south:"Південь",rg_west:"Захід",l_city:"Місто (Польща)",l_route:"Маршрут доставки",rt_turkey:"Туреччина",l_benefit:"Пільга на мито (−50%)",l_yard:"Ярд (Німеччина)",l_vat:"Ціна з ПДВ (MwSt)",l_deliv:"Доставка",dv_trailer:"Автовозом",dv_self:"Своїм ходом",btn_calc:"Розрахувати",biz_title:"Бізнес — прибуток від перепродажу",biz_sub:"Ринкова ціна з оголошень + ваш прибуток.",l_make:"Марка",l_model:"Модель",l_body:"Кузов",l_repair:"Вартість ремонту, €",btn_biz:"Оцінити прибуток",foot:"© 2026 BidCar",r_total:"РАЗОМ до міста",r_price:"Ціна авто",r_fees:"Збори аукціону",r_delivery:"Доставка",r_customs:"Розмитнення",r_reg:"Оформлення",r_oc:"OC-страховка (рік, орієнтир)",calc:"Рахую…",err:"Не вдалося порахувати. Спробуй пізніше.",binvest:"Вкладено всього",bsale:"Ринкова ціна",bprofit:"Прибуток",byear:"за {y} р.",bmodel:"по моделі {a}–{b}",bfew:"Мало оголошень — оцінка орієнтовна",bcnt:"{n} оголошень"}
 };
+Object.assign(T.ru,{gate_title:"Вход через Telegram",gate_sub:"Войдите, чтобы пользоваться калькулятором. Лимит и Premium — общие с ботом.",q_left:"Осталось {n} из {m}",q_prem:"⭐ Premium — безлимит",paywall:"Лимит {m} бесплатных расчётов исчерпан. Оформи Premium в боте.",openbot:"Открыть бота",relogin:"Сессия истекла — войди заново.",autherr:"Не удалось войти. Попробуй ещё раз."});
+Object.assign(T.pl,{gate_title:"Logowanie przez Telegram",gate_sub:"Zaloguj się, aby korzystać z kalkulatora. Limit i Premium wspólne z botem.",q_left:"Pozostało {n} z {m}",q_prem:"⭐ Premium — bez limitu",paywall:"Limit {m} darmowych obliczeń wyczerpany. Wykup Premium w bocie.",openbot:"Otwórz bota",relogin:"Sesja wygasła — zaloguj się ponownie.",autherr:"Logowanie nie powiodło się. Spróbuj ponownie."});
+Object.assign(T.en,{gate_title:"Sign in with Telegram",gate_sub:"Sign in to use the calculator. Limit and Premium are shared with the bot.",q_left:"{n} of {m} left",q_prem:"⭐ Premium — unlimited",paywall:"Your {m} free calculations are used up. Get Premium in the bot.",openbot:"Open the bot",relogin:"Session expired — sign in again.",autherr:"Sign-in failed. Try again."});
+Object.assign(T.uk,{gate_title:"Вхід через Telegram",gate_sub:"Увійдіть, щоб користуватися калькулятором. Ліміт і Premium — спільні з ботом.",q_left:"Залишилось {n} з {m}",q_prem:"⭐ Premium — безліміт",paywall:"Ліміт {m} безкоштовних розрахунків вичерпано. Оформи Premium у боті.",openbot:"Відкрити бота",relogin:"Сесія завершилась — увійди знову.",autherr:"Не вдалося увійти. Спробуй ще раз."});
 function t(k){return (T[LANG][k]!=null?T[LANG][k]:T.ru[k])||k}
 function applyLang(){
   document.documentElement.lang=LANG;
@@ -188,11 +207,13 @@ document.getElementById('calc').onclick=async()=>{
   else if(d==='us-by'){url='/calc/us-by';body={...base,price_usd:+val('price'),route:val('route'),benefit:document.getElementById('benefit').checked};}
   else{url='/calc/de';body={...base,price:+val('price'),city:document.getElementById('city_pl2').value,yard:val('yard'),goal:'self',has_vat:document.getElementById('vat').checked,delivery_type:val('deliv')};}
   try{
-    const r=await fetch(API+url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const r=await authFetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(r.status===402){const e=await r.json();res.classList.add('hidden');
+      err.innerHTML=t('paywall').replace('{m}',e.detail.limit)+' <a href="https://t.me/'+TG_BOT+'" target="_blank">'+t('openbot')+' →</a>';
+      err.classList.remove('hidden');refreshQuota();return;}
     if(!r.ok) throw new Error();
-    const j=await r.json();
-    renderResult(d,j);
-  }catch(e){res.classList.add('hidden');err.textContent=t('err');err.classList.remove('hidden');}
+    renderResult(d,await r.json()); refreshQuota();
+  }catch(e){if(e&&e.handled)return;res.classList.add('hidden');err.textContent=t('err');err.classList.remove('hidden');}
 };
 function val(id){return document.getElementById(id).value;}
 
@@ -251,10 +272,10 @@ document.getElementById('calcbiz').onclick=async()=>{
   if(lastDest==='by'){url='/resale/by';body={make_id:+val('make'),model_id:+val('model'),year,total:lastTotal,repair};}
   else{url='/resale/pl';body={make_slug:val('make'),model_slug:val('model'),year,body_slug:val('body'),mileage:0,total:lastTotal,repair};}
   try{
-    const r=await fetch(API+url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-    if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.detail||'');}
+    const r=await authFetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(typeof e.detail==='string'?e.detail:'');}
     renderBiz(await r.json(),year);
-  }catch(e){out.innerHTML='';berr.textContent=(e.message||t('err'));berr.classList.remove('hidden');}
+  }catch(e){if(e&&e.handled)return;out.innerHTML='';berr.textContent=(e.message||t('err'));berr.classList.remove('hidden');}
 };
 function renderBiz(j,year){
   const yp=j.year_price, mp=j.model_price;
@@ -270,7 +291,65 @@ function renderBiz(j,year){
     +`<div class="profit" style="color:${col};background:${bg}">${t('bprofit')}: ${pos?'+':''}${money(j.profit)} (${pos?'+':''}${j.margin}%)</div>`
     +`<div style="text-align:center;margin-top:10px"><a href="${j.url}" target="_blank">${j.market==='onliner'?'Onliner':'Otomoto'} →</a></div>`;
 }
-switchDir(); applyLang();
+// ── Авторизация через Telegram ──
+let TOKEN=localStorage.getItem('bidcar_token')||null;
+const TG_BOT="bid_calculation_bot";
+
+function renderWidget(){
+  const box=document.getElementById('tg-btn'); box.innerHTML='';
+  const s=document.createElement('script');
+  s.async=true; s.src="https://telegram.org/js/telegram-widget.js?22";
+  s.setAttribute('data-telegram-login',TG_BOT);
+  s.setAttribute('data-size','large');
+  s.setAttribute('data-onauth','onTelegramAuth(user)');
+  s.setAttribute('data-request-access','write');
+  box.appendChild(s);
+}
+window.onTelegramAuth=async(user)=>{
+  const gerr=document.getElementById('gerr'); gerr.classList.add('hidden');
+  try{
+    const r=await fetch(API+'/auth/telegram',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(user)});
+    if(!r.ok) throw new Error();
+    const j=await r.json();
+    TOKEN=j.token; localStorage.setItem('bidcar_token',TOKEN);
+    showApp(j);
+  }catch(e){gerr.textContent=t('autherr'); gerr.classList.remove('hidden');}
+};
+function quotaText(m){return m.premium?t('q_prem'):t('q_left').replace('{n}',Math.max(0,m.limit-m.used)).replace('{m}',m.limit);}
+function showApp(m){
+  document.getElementById('gate').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  const bar=document.getElementById('userbar'); bar.classList.remove('hidden');
+  if(m.name) document.getElementById('uname').textContent='👤 '+m.name;
+  document.getElementById('uquota').textContent=quotaText(m);
+}
+function showGate(){
+  document.getElementById('app').classList.add('hidden');
+  document.getElementById('userbar').classList.add('hidden');
+  document.getElementById('gate').classList.remove('hidden');
+  renderWidget();
+}
+async function refreshQuota(){
+  try{const r=await fetch(API+'/me',{headers:{Authorization:'Bearer '+TOKEN}});
+    if(r.ok){const m=await r.json();document.getElementById('uquota').textContent=quotaText(m);}}catch(e){}
+}
+async function authFetch(url,opts){
+  opts=opts||{}; opts.headers=Object.assign({},opts.headers,{Authorization:'Bearer '+TOKEN});
+  const r=await fetch(API+url,opts);
+  if(r.status===401){TOKEN=null;localStorage.removeItem('bidcar_token');showGate();
+    document.getElementById('gerr').textContent=t('relogin');document.getElementById('gerr').classList.remove('hidden');
+    throw {handled:true};}
+  return r;
+}
+async function initAuth(){
+  if(!TOKEN){showGate();return;}
+  try{const r=await fetch(API+'/me',{headers:{Authorization:'Bearer '+TOKEN}});
+    if(!r.ok) throw new Error();
+    showApp(await r.json());
+  }catch(e){TOKEN=null;localStorage.removeItem('bidcar_token');showGate();}
+}
+
+switchDir(); applyLang(); initAuth();
 </script>
 </body>
 </html>
