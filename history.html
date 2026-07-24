@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BidCar — история</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20512%20512'%3E%3Crect%20width='512'%20height='512'%20rx='96'%20fill='%230f2a52'/%3E%3Cpath%20d='M84%20292%20L96%20268%20C100%20259%20108%20253%20118%20252%20L206%20242%20L268%20205%20C280%20198%20293%20194%20307%20194%20L336%20194%20C356%20194%20375%20202%20389%20216%20L420%20247%20C433%20250%20442%20258%20444%20270%20L446%20286%20C447%20292%20443%20296%20437%20296%20L96%20296%20C88%20296%2084%20294%2084%20290%20Z'%20fill='%23ffffff'/%3E%3Crect%20x='120'%20y='344'%20width='272'%20height='10'%20rx='5'%20fill='%23e9b949'/%3E%3C/svg%3E">
+<style>
+  :root{--navy:#0a1a36;--panel:#0f2247;--panel2:#152c53;--gold:#e9b949;--gold2:#f7d67a;--ink:#eaf1fb;--mut:#9db2d4;--line:rgba(255,255,255,.11);}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--navy);color:var(--ink);line-height:1.5}
+  a{color:var(--gold);text-decoration:none}
+  .wrap{max-width:720px;margin:0 auto;padding:0 18px}
+  header{border-bottom:1px solid var(--line);background:rgba(10,26,54,.9);position:sticky;top:0;z-index:10}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px}
+  .logo svg{width:34px;height:34px}
+  .gold{color:var(--gold)}
+  .hidden{display:none !important}
+  h1{font-size:26px;font-weight:800;margin:26px 0 4px}
+  .sub{color:var(--mut);margin-bottom:22px;font-size:15px}
+  .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:18px}
+  .rtitle{font-weight:800;font-size:17px;margin-bottom:4px}
+  .err{color:#ff9a9a;font-size:14px;margin-top:12px}
+  .spin{color:var(--mut);font-size:14px;margin-top:12px}
+  footer{color:var(--mut);font-size:12px;text-align:center;padding:26px 0;border-top:1px solid var(--line);margin-top:20px}
+  .langs{display:flex;gap:2px;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:9px;padding:3px}
+  .langs button{background:none;border:none;color:var(--mut);font-size:13px;font-weight:600;padding:5px 8px;border-radius:6px;cursor:pointer}
+  .langs button.on{background:var(--gold);color:#25190a}
+  .nav-right{display:flex;align-items:center;gap:12px;position:relative}
+  .iconbtn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative}
+  .iconbtn:hover{border-color:var(--gold)}
+  .iconbtn svg{width:18px;height:18px}
+  .dot{position:absolute;top:-1px;right:-1px;width:9px;height:9px;border-radius:50%;background:#48d18a;border:2px solid var(--navy)}
+  .menu{position:absolute;top:46px;right:0;min-width:220px;background:#0e2246;border:1px solid var(--line);border-radius:12px;padding:8px;box-shadow:0 14px 34px rgba(0,0,0,.55);z-index:30}
+  .menu .mi{display:flex;justify-content:space-between;gap:10px;padding:9px 10px;font-size:14px;border-radius:8px;color:var(--ink)}
+  .menu .mi.muted{color:var(--mut);font-size:13px}
+  .menu a.mi{cursor:pointer}.menu a.mi:hover{background:rgba(255,255,255,.05)}
+  .menu .sep{height:1px;background:var(--line);margin:6px 2px}
+  .menu .login{justify-content:center;background:rgba(233,185,73,.12);color:var(--gold);font-weight:700}
+  .loginrow{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;align-items:center}
+  .loginbtn{display:inline-flex;align-items:center;gap:9px;height:40px;padding:0 20px;border-radius:999px;background:#131314;border:1px solid #3a3a3c;color:#e3e3e3;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+  .loginbtn:hover{background:#1d1d1f;border-color:#555}
+  .loginbtn svg{width:18px;height:18px}
+  .hi{display:flex;justify-content:space-between;gap:12px;padding:12px 2px;border-bottom:1px solid var(--line);font-size:14px}
+  .hi:last-child{border-bottom:none}
+  .hi .l{color:var(--mut)} .hi .l b{color:var(--ink)}
+  .hi .v{font-weight:700;white-space:nowrap} .hi .v.pos{color:#48d18a} .hi .v.neg{color:#ff8a8a}
+  .hdate{color:var(--mut);font-size:12px;margin-top:2px}
+</style>
+</head>
+<body>
+<header><div class="wrap nav">
+  <a class="logo" href="index.html"><svg viewBox="0 0 512 512"><rect width="512" height="512" rx="116" fill="#0f2a52"/><path d="M84 292 L96 268 C100 259 108 253 118 252 L206 242 L268 205 C280 198 293 194 307 194 L336 194 C356 194 375 202 389 216 L420 247 C433 250 442 258 444 270 L446 286 C447 292 443 296 437 296 L96 296 C88 296 84 294 84 290 Z" fill="#fff"/><circle cx="176" cy="300" r="30" fill="#0a1a36"/><circle cx="176" cy="300" r="30" fill="none" stroke="#e9b949" stroke-width="6"/><circle cx="356" cy="300" r="30" fill="#0a1a36"/><circle cx="356" cy="300" r="30" fill="none" stroke="#e9b949" stroke-width="6"/><rect x="120" y="344" width="272" height="10" rx="5" fill="#e9b949"/></svg> Bid<span class="gold">Car</span></a>
+  <div class="nav-right">
+    <div class="langs" id="langs"><button data-l="ru" class="on">RU</button><button data-l="pl">PL</button><button data-l="en">EN</button><button data-l="uk">UK</button></div>
+    <button class="iconbtn" id="profile" aria-label="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"/></svg><span class="dot hidden" id="pdot"></span></button>
+    <div class="menu hidden" id="menu"></div>
+  </div>
+</div></header>
+
+<div class="wrap">
+  <h1 data-i="h1">История расчётов</h1>
+  <div class="sub" data-i="sub">Ваши последние расчёты и оценки перепродажи.</div>
+
+  <!-- GATE -->
+  <div class="card hidden" id="gate" style="text-align:center">
+    <div class="rtitle" data-i="gate_title">Вход</div>
+    <div class="sub" style="margin:8px 0 18px" data-i="gate_sub">Войдите, чтобы посмотреть историю.</div>
+    <div class="loginrow">
+      <button id="tg-login" class="loginbtn"><svg viewBox="0 0 24 24" fill="#29a9eb"><path d="M9.78 16.27l-.39 3.9c.55 0 .79-.24 1.08-.52l2.6-2.48 5.38 3.94c.99.55 1.69.26 1.95-.91l3.53-16.6c.31-1.44-.52-2.01-1.48-1.65L1.13 9.36C-.28 9.9-.26 10.68.89 11.04l5.32 1.66L18.6 5.02c.58-.38 1.1-.17.67.21L9.78 16.27z"/></svg><span>Telegram</span></button>
+      <div id="g-btn"></div>
+    </div>
+    <div class="err hidden" id="gerr"></div>
+  </div>
+
+  <!-- LIST -->
+  <div class="card hidden" id="listcard"><div id="histbody"></div></div>
+</div>
+
+<footer><span data-i="foot">© 2026 BidCar</span> · <a href="calculator.html" data-i="to_calc">Калькулятор</a></footer>
+
+<script src="https://accounts.google.com/gsi/client" async></script>
+<script src="https://telegram.org/js/telegram-widget.js?22" async></script>
+<script>
+const API="https://bidcarapi.duckdns.org", TG_BOT_ID="8962904294";
+const GOOGLE_CLIENT_ID="791120373917-t1jhd97sub6fqgepf5kl6n290jq37nqj.apps.googleusercontent.com";
+let LANG="ru", TOKEN=localStorage.getItem('bidcar_token')||null, ME=null;
+
+const T={
+ ru:{h1:"История расчётов",sub:"Ваши последние расчёты и оценки перепродажи.",gate_title:"Вход",gate_sub:"Войдите, чтобы посмотреть историю.",foot:"© 2026 BidCar",to_calc:"Калькулятор",
+   f_petrol:"Бензин",f_diesel:"Дизель",f_electric:"Электро",f_hybrid:"Гибрид",f_plugin:"Plug-in",
+   hist_empty:"Пока пусто — сделай первый расчёт в калькуляторе.",loading:"Загружаю…",err:"Не удалось загрузить.",autherr:"Не удалось войти. Попробуй ещё раз.",relogin:"Сессия истекла — войди заново.",
+   m_status:"Статус",m_free:"Free",q_prem:"⭐ Premium",m_left:"Осталось",logout:"Выйти",m_login:"Войти",m_calc:"Открыть калькулятор"},
+ pl:{h1:"Historia obliczeń",sub:"Twoje ostatnie obliczenia i wyceny odsprzedaży.",gate_title:"Logowanie",gate_sub:"Zaloguj się, aby zobaczyć historię.",foot:"© 2026 BidCar",to_calc:"Kalkulator",
+   f_petrol:"Benzyna",f_diesel:"Diesel",f_electric:"Elektryczny",f_hybrid:"Hybryda",f_plugin:"Plug-in",
+   hist_empty:"Na razie pusto — wykonaj pierwsze obliczenie.",loading:"Ładuję…",err:"Nie udało się załadować.",autherr:"Logowanie nie powiodło się.",relogin:"Sesja wygasła — zaloguj się ponownie.",
+   m_status:"Status",m_free:"Free",q_prem:"⭐ Premium",m_left:"Pozostało",logout:"Wyloguj",m_login:"Zaloguj",m_calc:"Otwórz kalkulator"},
+ en:{h1:"Calculation history",sub:"Your recent calculations and resale estimates.",gate_title:"Sign in",gate_sub:"Sign in to view your history.",foot:"© 2026 BidCar",to_calc:"Calculator",
+   f_petrol:"Petrol",f_diesel:"Diesel",f_electric:"Electric",f_hybrid:"Hybrid",f_plugin:"Plug-in",
+   hist_empty:"Empty yet — make your first calculation.",loading:"Loading…",err:"Couldn't load.",autherr:"Sign-in failed.",relogin:"Session expired — sign in again.",
+   m_status:"Status",m_free:"Free",q_prem:"⭐ Premium",m_left:"Left",logout:"Log out",m_login:"Sign in",m_calc:"Open calculator"},
+ uk:{h1:"Історія розрахунків",sub:"Ваші останні розрахунки та оцінки перепродажу.",gate_title:"Вхід",gate_sub:"Увійдіть, щоб переглянути історію.",foot:"© 2026 BidCar",to_calc:"Калькулятор",
+   f_petrol:"Бензин",f_diesel:"Дизель",f_electric:"Електро",f_hybrid:"Гібрид",f_plugin:"Plug-in",
+   hist_empty:"Поки порожньо — зроби перший розрахунок.",loading:"Завантажую…",err:"Не вдалося завантажити.",autherr:"Не вдалося увійти.",relogin:"Сесія завершилась — увійди знову.",
+   m_status:"Статус",m_free:"Free",q_prem:"⭐ Premium",m_left:"Залишилось",logout:"Вийти",m_login:"Увійти",m_calc:"Відкрити калькулятор"}
+};
+function t(k){return (T[LANG]&&T[LANG][k]!=null?T[LANG][k]:T.ru[k])||k}
+function applyLang(){
+  document.documentElement.lang=LANG;
+  document.querySelectorAll('[data-i]').forEach(el=>{const k=el.getAttribute('data-i');if(T[LANG][k]!=null)el.textContent=T[LANG][k];});
+  document.querySelectorAll('#langs button').forEach(b=>b.classList.toggle('on',b.dataset.l===LANG));
+  renderMenu();
+}
+document.getElementById('langs').onclick=e=>{if(e.target.dataset.l){LANG=e.target.dataset.l;applyLang();}};
+
+// ── меню профиля ──
+function renderMenu(){
+  const menu=document.getElementById('menu');
+  if(TOKEN&&ME){
+    menu.innerHTML=`<div class="mi"><b>👤 ${ME.name||''}</b></div>`
+      +`<div class="mi muted"><span>${t('m_status')}</span><span>${ME.premium?t('q_prem'):t('m_free')}</span></div>`
+      +(ME.premium?'':`<div class="mi muted"><span>${t('m_left')}</span><span>${Math.max(0,ME.limit-ME.used)} / ${ME.limit}</span></div>`)
+      +`<div class="sep"></div>`
+      +`<a class="mi" href="calculator.html">${t('m_calc')}</a>`
+      +`<a class="mi" id="mlogout">${t('logout')}</a>`;
+    document.getElementById('mlogout').onclick=(e)=>{e.preventDefault();doLogout();};
+  }else{
+    menu.innerHTML=`<a class="mi login" id="mlogin">${t('m_login')}</a>`;
+    document.getElementById('mlogin').onclick=(e)=>{e.preventDefault();closeMenu();showGate();};
+  }
+}
+function closeMenu(){document.getElementById('menu').classList.add('hidden');}
+document.getElementById('profile').onclick=(e)=>{e.stopPropagation();const m=document.getElementById('menu');const was=m.classList.contains('hidden');renderMenu();m.classList.toggle('hidden',!was);};
+document.addEventListener('click',(e)=>{const m=document.getElementById('menu');if(!m.classList.contains('hidden')&&!e.target.closest('#menu')&&!e.target.closest('#profile'))closeMenu();});
+
+// ── история ──
+const _FLAG={us:"🇺🇸",de:"🇩🇪",pl:"🇵🇱",by:"🇧🇾"};
+function _hdate(ts){return ts?(ts.slice(0,10)+" "+ts.slice(11,16)):"";}
+function _num(n){return Math.round(n||0).toLocaleString("ru-RU");}
+function renderHistory(items){
+  const b=document.getElementById("histbody");
+  if(!items.length){b.innerHTML=`<div class="sub" style="margin:0">${t("hist_empty")}</div>`;return;}
+  b.innerHTML=items.map(it=>{
+    const date=`<div class="hdate">${_hdate(it.ts)}</div>`;
+    const biz=(it.kind==='biz'||it.kind==='calc+biz')&&it.profit_eur!=null;
+    let right;
+    if(it.kind==='biz'){ const pos=(it.profit_eur||0)>=0; right=`<span class="v ${pos?'pos':'neg'}">${pos?'+':''}${_num(it.profit_eur)} € (${it.margin||0}%)</span>`; }
+    else { right=`<span class="v">${_num(it.total_eur)} €</span>`+(biz?` <span class="v ${(it.profit_eur||0)>=0?'pos':'neg'}">/ ${(it.profit_eur||0)>=0?'+':''}${_num(it.profit_eur)} €</span>`:''); }
+    const carline = (it.make||it.model)
+      ? `<b>${it.make||''} ${it.model||''}</b> ${it.year||''}`
+      : `${(_FLAG[it.country]||'')}→${(_FLAG[it.destination]||'')} · ${it.year||''} · ${it.engine_cc||''}cc · ${it.fuel?t('f_'+it.fuel):''}`;
+    return `<div class="hi"><div class="l">${carline}${date}</div>${right}</div>`;
+  }).join("");
+}
+
+async function authFetch(url,opts){
+  opts=opts||{}; opts.headers=Object.assign({},opts.headers,{Authorization:'Bearer '+TOKEN});
+  const r=await fetch(API+url,opts);
+  if(r.status===401){doLogout();document.getElementById('gerr').textContent=t('relogin');document.getElementById('gerr').classList.remove('hidden');throw {handled:true};}
+  return r;
+}
+async function loadHistory(){
+  const b=document.getElementById("histbody"); b.innerHTML=`<div class="spin">${t('loading')}</div>`;
+  try{const r=await authFetch('/history',{});const j=await r.json();renderHistory(j.items||[]);}
+  catch(e){if(e&&e.handled)return;b.innerHTML=`<div class="err">${t('err')}</div>`;}
+}
+function showAuthed(m){
+  ME=m; document.getElementById('gate').classList.add('hidden');
+  document.getElementById('listcard').classList.remove('hidden');
+  document.getElementById('pdot').classList.remove('hidden');
+  renderMenu(); loadHistory();
+}
+function showGate(){
+  ME=null; document.getElementById('listcard').classList.add('hidden');
+  document.getElementById('gate').classList.remove('hidden');
+  document.getElementById('pdot').classList.add('hidden');
+  renderMenu(); initGoogle();
+}
+function doLogout(){TOKEN=null;localStorage.removeItem('bidcar_token');localStorage.removeItem('bidcar_name');closeMenu();showGate();}
+
+// ── вход ──
+async function doAuth(url,payload){
+  const gerr=document.getElementById('gerr'); gerr.classList.add('hidden');
+  try{const r=await fetch(API+url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    if(!r.ok)throw new Error(); const j=await r.json();
+    TOKEN=j.token; localStorage.setItem('bidcar_token',TOKEN); if(j.name)localStorage.setItem('bidcar_name',j.name);
+    showAuthed(j);
+  }catch(e){gerr.textContent=t('autherr');gerr.classList.remove('hidden');}
+}
+window.onTelegramAuth=(u)=>doAuth('/auth/telegram',u);
+function tgLogin(){ if(window.Telegram&&Telegram.Login&&Telegram.Login.auth){Telegram.Login.auth({bot_id:TG_BOT_ID,request_access:'write'},(u)=>{if(u)onTelegramAuth(u);});} }
+window.onGoogleAuth=(resp)=>doAuth('/auth/google',{credential:resp.credential});
+function initGoogle(){
+  const box=document.getElementById('g-btn');
+  if(!(window.google&&google.accounts&&google.accounts.id)){setTimeout(initGoogle,400);return;}
+  box.innerHTML='';
+  google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:onGoogleAuth});
+  google.accounts.id.renderButton(box,{theme:'filled_black',size:'large',shape:'pill',text:'signin',width:200});
+}
+document.getElementById('tg-login').onclick=tgLogin;
+
+async function init(){
+  applyLang();
+  if(!TOKEN){showGate();return;}
+  try{const r=await fetch(API+'/me',{headers:{Authorization:'Bearer '+TOKEN}});
+    if(!r.ok)throw new Error(); const j=await r.json(); j.name=localStorage.getItem('bidcar_name'); showAuthed(j);
+  }catch(e){TOKEN=null;localStorage.removeItem('bidcar_token');showGate();}
+}
+init();
+</script>
+</body>
+</html>

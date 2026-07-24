@@ -372,9 +372,8 @@ function renderMenu(){
       +`<div class="mi muted"><span>${t('m_status')}</span><span>${ME.premium?t('q_prem'):t('m_free')}</span></div>`
       +(ME.premium?'':`<div class="mi muted"><span>${t('m_left')}</span><span>${Math.max(0,ME.limit-ME.used)} / ${ME.limit}</span></div>`)
       +`<div class="sep"></div>`
-      +`<a class="mi" id="mhist">${t('m_history')}</a>`
+      +`<a class="mi" href="history.html">${t('m_history')}</a>`
       +`<a class="mi" id="mlogout">${t('logout')}</a>`;
-    document.getElementById('mhist').onclick=(e)=>{e.preventDefault();closeMenu();openHistory();};
     document.getElementById('mlogout').onclick=(e)=>{e.preventDefault();doLogout();};
   }else{
     menu.innerHTML=`<a class="mi login" id="mlogin">${t('m_login')}</a>`;
@@ -446,7 +445,6 @@ document.getElementById("histclose").onclick=(e)=>{e.preventDefault();document.g
 document.getElementById("histwrap").onclick=(e)=>{if(e.target.id==="histwrap")e.target.classList.add("hidden");};
 document.getElementById('tg-login').onclick=tgLogin;
 switchDir(); applyLang(); initAuth();
-if(location.search.indexOf('history=1')>=0){setTimeout(()=>{if(TOKEN)openHistory();},800);}
 </script>
 </body>
 </html>

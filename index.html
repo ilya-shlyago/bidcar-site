@@ -321,7 +321,7 @@ window.renderMenu=function(){
       +`<div class="mi muted"><span>${mt('status')}</span><span>${ME.premium?mt('prem'):mt('free')}</span></div>`
       +(ME.premium?'':`<div class="mi muted"><span>${mt('left')}</span><span>${Math.max(0,ME.limit-ME.used)} / ${ME.limit}</span></div>`)
       +`<div class="sep"></div>`
-      +`<a class="mi" href="calculator.html?history=1">${mt('history')}</a>`
+      +`<a class="mi" href="history.html">${mt('history')}</a>`
       +`<a class="mi" href="calculator.html">${mt('calc')}</a>`
       +`<a class="mi" id="mlogout">${mt('logout')}</a>`;
     document.getElementById('mlogout').onclick=(e)=>{e.preventDefault();TOKEN=null;ME=null;localStorage.removeItem('bidcar_token');localStorage.removeItem('bidcar_name');document.getElementById('pdot').classList.add('hidden');closeMenu();renderMenu();};
