@@ -62,6 +62,10 @@
   .menu a.mi:hover{background:rgba(255,255,255,.05)}
   .menu .sep{height:1px;background:var(--line);margin:6px 2px}
   .menu .login{justify-content:center;background:rgba(233,185,73,.12);color:var(--gold);font-weight:700}
+  .loginrow{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;align-items:center}
+  .loginbtn{display:inline-flex;align-items:center;gap:9px;height:40px;padding:0 20px;border-radius:999px;background:#131314;border:1px solid #3a3a3c;color:#e3e3e3;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+  .loginbtn:hover{background:#1d1d1f;border-color:#555}
+  .loginbtn svg{width:18px;height:18px}
 </style>
 </head>
 <body>
@@ -82,9 +86,10 @@
   <div class="card" id="gate" style="text-align:center">
     <div class="rtitle" data-i="gate_title">Вход</div>
     <div class="sub" style="margin:8px 0 18px" data-i="gate_sub">Войдите, чтобы пользоваться калькулятором.</div>
-    <div id="tg-btn" style="display:inline-block"></div>
-    <div id="or" class="hidden" style="color:var(--mut);font-size:13px;margin:14px 0 12px">— <span data-i="or">или</span> —</div>
-    <div id="g-btn" style="display:flex;justify-content:center"></div>
+    <div class="loginrow">
+      <button id="tg-login" class="loginbtn"><svg viewBox="0 0 24 24" fill="#29a9eb"><path d="M9.78 16.27l-.39 3.9c.55 0 .79-.24 1.08-.52l2.6-2.48 5.38 3.94c.99.55 1.69.26 1.95-.91l3.53-16.6c.31-1.44-.52-2.01-1.48-1.65L1.13 9.36C-.28 9.9-.26 10.68.89 11.04l5.32 1.66L18.6 5.02c.58-.38 1.1-.17.67.21L9.78 16.27z"/></svg><span>Telegram</span></button>
+      <div id="g-btn"></div>
+    </div>
     <div class="err hidden" id="gerr"></div>
   </div>
 
@@ -166,6 +171,7 @@
 <footer><span data-i="foot">© 2026 BidCar</span> · <a href="https://t.me/bid_calculation_bot" target="_blank">Telegram</a></footer>
 
 <script src="https://accounts.google.com/gsi/client" async></script>
+<script src="https://telegram.org/js/telegram-widget.js?22" async></script>
 
 <script>
 const API = "https://bidcarapi.duckdns.org";
@@ -308,17 +314,11 @@ function renderBiz(j,year){
 }
 // ── Авторизация через Telegram ──
 let TOKEN=localStorage.getItem('bidcar_token')||null;
-const TG_BOT="bid_calculation_bot";
-
-function renderWidget(){
-  const box=document.getElementById('tg-btn'); box.innerHTML='';
-  const s=document.createElement('script');
-  s.async=true; s.src="https://telegram.org/js/telegram-widget.js?22";
-  s.setAttribute('data-telegram-login',TG_BOT);
-  s.setAttribute('data-size','large');
-  s.setAttribute('data-onauth','onTelegramAuth(user)');
-  s.setAttribute('data-request-access','write');
-  box.appendChild(s);
+const TG_BOT="bid_calculation_bot", TG_BOT_ID="8962904294";
+function tgLogin(){
+  if(window.Telegram&&Telegram.Login&&Telegram.Login.auth){
+    Telegram.Login.auth({bot_id:TG_BOT_ID,request_access:'write'},(u)=>{if(u)onTelegramAuth(u);});
+  }else{document.getElementById('gerr').textContent=t('autherr');document.getElementById('gerr').classList.remove('hidden');}
 }
 window.onTelegramAuth=async(user)=>{
   await doAuth('/auth/telegram', user);
@@ -327,14 +327,14 @@ window.onTelegramAuth=async(user)=>{
 const GOOGLE_CLIENT_ID="791120373917-t1jhd97sub6fqgepf5kl6n290jq37nqj.apps.googleusercontent.com";   // <-- вставь свой Client ID из Google Cloud
 window.onGoogleAuth=async(resp)=>{ await doAuth('/auth/google', {credential:resp.credential}); };
 function initGoogle(){
-  const box=document.getElementById('g-btn'), or=document.getElementById('or');
+  const box=document.getElementById('g-btn');
   if(!GOOGLE_CLIENT_ID||GOOGLE_CLIENT_ID.startsWith('PASTE')||!(window.google&&google.accounts&&google.accounts.id)){
     if(!(window.google&&google.accounts)) setTimeout(initGoogle,400);   // GIS ещё грузится
     return;
   }
-  or.classList.remove('hidden'); box.innerHTML='';
+  box.innerHTML='';
   google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID, callback:onGoogleAuth});
-  google.accounts.id.renderButton(box,{theme:'filled_black',size:'large',shape:'pill',width:240});
+  google.accounts.id.renderButton(box,{theme:'filled_black',size:'large',shape:'pill',text:'signin',width:200});
 }
 async function doAuth(url, payload){
   const gerr=document.getElementById('gerr'); gerr.classList.add('hidden');
@@ -377,7 +377,7 @@ function showGate(){
   document.getElementById('app').classList.add('hidden');
   document.getElementById('gate').classList.remove('hidden');
   document.getElementById('pdot').classList.add('hidden');
-  renderMenu(); renderWidget(); initGoogle();
+  renderMenu(); initGoogle();
 }
 function doLogout(){TOKEN=null;localStorage.removeItem('bidcar_token');localStorage.removeItem('bidcar_name');document.getElementById('gerr').classList.add('hidden');closeMenu();showGate();}
 async function refreshQuota(){
@@ -403,6 +403,7 @@ async function initAuth(){
   }catch(e){TOKEN=null;localStorage.removeItem('bidcar_token');showGate();}
 }
 
+document.getElementById('tg-login').onclick=tgLogin;
 switchDir(); applyLang(); initAuth();
 </script>
 </body>
