@@ -324,7 +324,7 @@ window.onTelegramAuth=async(user)=>{
   await doAuth('/auth/telegram', user);
 };
 // ── Google Sign-In ──
-const GOOGLE_CLIENT_ID="PASTE_YOUR_GOOGLE_CLIENT_ID";   // <-- вставь свой Client ID из Google Cloud
+const GOOGLE_CLIENT_ID="791120373917-t1jhd97sub6fqgepf5kl6n290jq37nqj.apps.googleusercontent.com";   // <-- вставь свой Client ID из Google Cloud
 window.onGoogleAuth=async(resp)=>{ await doAuth('/auth/google', {credential:resp.credential}); };
 function initGoogle(){
   const box=document.getElementById('g-btn'), or=document.getElementById('or');
